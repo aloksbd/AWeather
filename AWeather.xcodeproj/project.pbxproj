@@ -10,6 +10,11 @@
 		5CCC0126258DE711004FD118 /* AWeather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CCC011C258DE710004FD118 /* AWeather.framework */; };
 		5CCC012B258DE711004FD118 /* AWeatherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC012A258DE711004FD118 /* AWeatherTests.swift */; };
 		5CCC012D258DE711004FD118 /* AWeather.h in Headers */ = {isa = PBXBuildFile; fileRef = 5CCC011F258DE710004FD118 /* AWeather.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		5CCC0141258E0F07004FD118 /* AForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0140258E0F07004FD118 /* AForecast.swift */; };
+		5CCC0146258E126F004FD118 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0145258E126F004FD118 /* City.swift */; };
+		5CCC014A258E1291004FD118 /* ADailyForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0149258E1291004FD118 /* ADailyForecast.swift */; };
+		5CCC0150258E12B4004FD118 /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC014F258E12B4004FD118 /* Weather.swift */; };
+		5CCC0154258E12D4004FD118 /* Temperature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0153258E12D4004FD118 /* Temperature.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +34,11 @@
 		5CCC0125258DE711004FD118 /* AWeatherTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AWeatherTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CCC012A258DE711004FD118 /* AWeatherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWeatherTests.swift; sourceTree = "<group>"; };
 		5CCC012C258DE711004FD118 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5CCC0140258E0F07004FD118 /* AForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AForecast.swift; sourceTree = "<group>"; };
+		5CCC0145258E126F004FD118 /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
+		5CCC0149258E1291004FD118 /* ADailyForecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ADailyForecast.swift; sourceTree = "<group>"; };
+		5CCC014F258E12B4004FD118 /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
+		5CCC0153258E12D4004FD118 /* Temperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temperature.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +81,8 @@
 		5CCC011E258DE710004FD118 /* AWeather */ = {
 			isa = PBXGroup;
 			children = (
+				5CCC0144258E1244004FD118 /* Models */,
+				5CCC013F258E0DD4004FD118 /* Weather Feature */,
 				5CCC011F258DE710004FD118 /* AWeather.h */,
 				5CCC0120258DE710004FD118 /* Info.plist */,
 			);
@@ -84,6 +96,25 @@
 				5CCC012C258DE711004FD118 /* Info.plist */,
 			);
 			path = AWeatherTests;
+			sourceTree = "<group>";
+		};
+		5CCC013F258E0DD4004FD118 /* Weather Feature */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "Weather Feature";
+			sourceTree = "<group>";
+		};
+		5CCC0144258E1244004FD118 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5CCC0140258E0F07004FD118 /* AForecast.swift */,
+				5CCC0145258E126F004FD118 /* City.swift */,
+				5CCC0149258E1291004FD118 /* ADailyForecast.swift */,
+				5CCC014F258E12B4004FD118 /* Weather.swift */,
+				5CCC0153258E12D4004FD118 /* Temperature.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -147,6 +178,7 @@
 				TargetAttributes = {
 					5CCC011B258DE710004FD118 = {
 						CreatedOnToolsVersion = 12.2;
+						LastSwiftMigration = 1220;
 					};
 					5CCC0124258DE711004FD118 = {
 						CreatedOnToolsVersion = 12.2;
@@ -194,6 +226,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CCC0150258E12B4004FD118 /* Weather.swift in Sources */,
+				5CCC0141258E0F07004FD118 /* AForecast.swift in Sources */,
+				5CCC0146258E126F004FD118 /* City.swift in Sources */,
+				5CCC0154258E12D4004FD118 /* Temperature.swift in Sources */,
+				5CCC014A258E1291004FD118 /* ADailyForecast.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +377,7 @@
 		5CCC0131258DE711004FD118 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -357,6 +395,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.alok.AWeather;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -364,6 +403,7 @@
 		5CCC0132258DE711004FD118 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
@@ -388,6 +428,7 @@
 		5CCC0134258DE711004FD118 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 95T69XHSY5;
@@ -406,6 +447,7 @@
 		5CCC0135258DE711004FD118 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = 95T69XHSY5;
