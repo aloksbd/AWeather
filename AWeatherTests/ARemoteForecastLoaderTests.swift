@@ -9,7 +9,7 @@ import XCTest
 @testable import AWeather
 
 protocol AForecastLoader{
-    typealias Result = Swift.Result<Data, Error>
+    typealias Result = Swift.Result<AForecast, Error>
 
     func load(completion: @escaping (AForecastLoader.Result) -> ())
 }
@@ -29,34 +29,46 @@ class ARemoteForecastLoader: AForecastLoader{
     }
     
     func load(completion: @escaping (AForecastLoader.Result) -> ()){
-        httpClient.get(from: url){ error,response  in
-            if response != nil{
-                completion(.failure(Error.invalidData))
-            }else{
+        httpClient.get(from: url){ result  in
+            switch result{
+            case let .failure(_):
                 completion(.failure(Error.connectivity))
+            case  let .success(data):
+                if let data = data{
+                    if let forecast = try? JSONDecoder().decode(AForecast.self, from: data){
+                        completion(.success(forecast))
+                    }else{
+                        completion(.failure(Error.invalidData))
+                    }
+                }else{
+                    completion(.failure(Error.invalidData))
+                }
             }
         }
     }
 }
 
-class HTTPClientSpy{
-    var requestedUrls = [URL]()
-    var completions = [(Error?, HTTPURLResponse?) -> ()]()
+protocol HTTPClient{
+    typealias Result = Swift.Result<Data?, Error>
+    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> ())
+}
+
+class HTTPClientSpy: HTTPClient{
     
-    func get(from url: URL,completion: @escaping (Error?, HTTPURLResponse?) -> ()) {
+    var requestedUrls = [URL]()
+    var completions = [(HTTPClient.Result) -> ()]()
+    
+    func get(from url: URL,completion: @escaping (HTTPClient.Result) -> ()) {
         completions.append(completion)
         requestedUrls.append(url)
     }
     
     func complete(with error: Error, at index: Int = 0){
-        completions[index](error, nil)
+        completions[index](.failure(error))
     }
     
-    func complete(withStatusCode code: Int, at  index: Int = 0){
-        let response = HTTPURLResponse(url: requestedUrls[index], statusCode: code,
-            httpVersion: nil,
-            headerFields: nil)
-        completions[index](nil,response)
+    func complete(withStatusCode code: Int, with data: Data, at  index: Int = 0){
+        completions[index](.success(data))
     }
 }
 
@@ -95,6 +107,7 @@ class ARemoteForecastLoaderTests: XCTestCase {
             case let .failure(error as ARemoteForecastLoader.Error):
                 capturedError.append(error)
             default:
+                
                 break
             }
         }
@@ -120,7 +133,7 @@ class ARemoteForecastLoaderTests: XCTestCase {
                 }
             }
             
-            client.complete(withStatusCode: code, at: index)
+            client.complete(withStatusCode: code, with: Data(), at: index)
             XCTAssertEqual(capturedError, [.invalidData])
         }
     }
