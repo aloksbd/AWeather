@@ -7,10 +7,10 @@
 
 public struct AForecast: Decodable, Equatable{
     public let city: City
-    public let forecastList: [ADailyForecast]
+    public let list: [ADailyForecast]
     
-    public init(city: City, forecastList: [ADailyForecast]){
+    public init(city: City, list: [ADailyForecast]){
         self.city = city
-        self.forecastList = forecastList
+        self.list = list
     }
 }
