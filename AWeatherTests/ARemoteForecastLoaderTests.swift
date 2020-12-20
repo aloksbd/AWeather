@@ -45,12 +45,13 @@ class ARemoteForecastLoaderTests: XCTestCase {
         XCTAssertNotNil(client.requestedUrls)
     }
     
-//    func test_load_requestDataFromUrlTwice(){
-//
-//            let client = HTTPClientSpy()
-//            let sut = ARemoteForecastLoader(httpClient: client)
-//
-//            sut.load()
-//            XCTAssertNotNil(client.requestedUrls)
-//    }
+    func test_load_requestDataFromUrlTwice(){
+        let client = HTTPClientSpy()
+        let url = URL(string: "https://url.com")!
+        let sut = ARemoteForecastLoader(httpClient: client, url: url)
+
+        sut.load()
+        sut.load()
+        XCTAssertEqual(client.requestedUrls, [url,url])
+    }
 }
