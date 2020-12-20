@@ -14,6 +14,10 @@ class ARemoteForecastLoader{
     init(httpClient: HTTPClientSpy){
         self.httpClient = httpClient
     }
+    
+    func load(){
+        httpClient.requestedUrls.append(URL(string: "https://url.com")!)
+    }
 }
 
 class HTTPClientSpy{
@@ -27,5 +31,13 @@ class ARemoteForecastLoaderTests: XCTestCase {
         _ = ARemoteForecastLoader(httpClient: httpClient)
         
         XCTAssertTrue(httpClient.requestedUrls.isEmpty)
+    }
+    
+    func test_load_requestDataFromUrl(){
+        let client = HTTPClientSpy()
+        let sut = ARemoteForecastLoader(httpClient: client)
+        
+        sut.load()
+        XCTAssertNotNil(client.requestedUrls)
     }
 }
