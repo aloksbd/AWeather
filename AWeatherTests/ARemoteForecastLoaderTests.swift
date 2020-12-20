@@ -29,29 +29,34 @@ class HTTPClientSpy{
 class ARemoteForecastLoaderTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromUrl(){
-        let httpClient = HTTPClientSpy()
         let url = URL(string: "https://url.com")!
-        _ = ARemoteForecastLoader(httpClient: httpClient, url: url)
+        let (_,client) = makeSUT(url: url)
         
-        XCTAssertTrue(httpClient.requestedUrls.isEmpty)
+        XCTAssertTrue(client.requestedUrls.isEmpty)
     }
     
     func test_load_requestDataFromUrl(){
-        let client = HTTPClientSpy()
         let url = URL(string: "https://url.com")!
-        let sut = ARemoteForecastLoader(httpClient: client, url: url)
+        let (sut,client) = makeSUT(url: url)
         
         sut.load()
         XCTAssertNotNil(client.requestedUrls)
     }
     
     func test_load_requestDataFromUrlTwice(){
-        let client = HTTPClientSpy()
         let url = URL(string: "https://url.com")!
-        let sut = ARemoteForecastLoader(httpClient: client, url: url)
+        let (sut,client) = makeSUT(url: url)
 
         sut.load()
         sut.load()
         XCTAssertEqual(client.requestedUrls, [url,url])
+    }
+    
+    //MARK: Helpers
+    
+    private func makeSUT(url: URL) -> (sut: ARemoteForecastLoader, client: HTTPClientSpy){
+        let client = HTTPClientSpy()
+        let sut = ARemoteForecastLoader(httpClient: client, url: url)
+        return (sut,client)
     }
 }
