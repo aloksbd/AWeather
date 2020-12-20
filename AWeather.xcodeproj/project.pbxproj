@@ -15,6 +15,7 @@
 		5CCC0154258E12D4004FD118 /* Temperature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0153258E12D4004FD118 /* Temperature.swift */; };
 		5CCC0161258E6519004FD118 /* AForecastRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0160258E6519004FD118 /* AForecastRepository.swift */; };
 		5CCC0168258E6586004FD118 /* ARemoteForecastLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0167258E6586004FD118 /* ARemoteForecastLoaderTests.swift */; };
+		5CCC0177258F5F6E004FD118 /* AForecastItemMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0176258F5F6E004FD118 /* AForecastItemMaker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,7 @@
 		5CCC0153258E12D4004FD118 /* Temperature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Temperature.swift; sourceTree = "<group>"; };
 		5CCC0160258E6519004FD118 /* AForecastRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AForecastRepository.swift; sourceTree = "<group>"; };
 		5CCC0167258E6586004FD118 /* ARemoteForecastLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARemoteForecastLoaderTests.swift; sourceTree = "<group>"; };
+		5CCC0176258F5F6E004FD118 /* AForecastItemMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AForecastItemMaker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +95,7 @@
 		5CCC0129258DE711004FD118 /* AWeatherTests */ = {
 			isa = PBXGroup;
 			children = (
+				5CCC0175258F5F3A004FD118 /* Helpers */,
 				5CCC012C258DE711004FD118 /* Info.plist */,
 				5CCC0167258E6586004FD118 /* ARemoteForecastLoaderTests.swift */,
 			);
@@ -117,6 +120,14 @@
 				5CCC0153258E12D4004FD118 /* Temperature.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		5CCC0175258F5F3A004FD118 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				5CCC0176258F5F6E004FD118 /* AForecastItemMaker.swift */,
+			);
+			path = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -241,6 +252,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CCC0177258F5F6E004FD118 /* AForecastItemMaker.swift in Sources */,
 				5CCC0168258E6586004FD118 /* ARemoteForecastLoaderTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
