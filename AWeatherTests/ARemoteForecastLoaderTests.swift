@@ -95,12 +95,14 @@ class ARemoteForecastLoaderTests: XCTestCase {
     func test_load_deliversErrorOnFailure(){
         let (sut,client) = makeSUT()
         
-        var capturedError = [ARemoteForecastLoader.Error]()
-        sut.load{ capturedError.append($0) }
-        
-        client.complete(withStatusCode: 400)
-        
-        XCTAssertEqual(capturedError, [.invalidData])
+        let codes = [100,199,300,404,500]
+        codes.enumerated().forEach { (index, code) in
+            var capturedError = [ARemoteForecastLoader.Error]()
+            sut.load{ capturedError.append($0) }
+            
+            client.complete(withStatusCode: code, at: index)
+            XCTAssertEqual(capturedError, [.invalidData])
+        }
     }
     
     //MARK: Helpers
