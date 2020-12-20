@@ -29,9 +29,10 @@ class ARemoteForecastLoader: AForecastLoader{
     }
     
     func load(completion: @escaping (AForecastLoader.Result) -> ()){
-        httpClient.get(from: url){ result  in
+        httpClient.get(from: url){ [weak self] result in
+            guard self != nil else { return }
             switch result{
-            case let .failure(_):
+            case .failure(_):
                 completion(.failure(Error.connectivity))
             case  let .success(data):
                 if let data = data{
@@ -146,6 +147,23 @@ class ARemoteForecastLoaderTests: XCTestCase {
             let jsonData = try! JSONSerialization.data(withJSONObject: forecastItemJSON)
             client.complete(withStatusCode: 200, with: jsonData)
         })
+    }
+    
+    func test_load_doesnotDeliverResultAfterSUTInstanceHasBeenDeallocated(){
+        let url = URL(string: "https://any-url.com")!
+        let client = HTTPClientSpy()
+        var sut: ARemoteForecastLoader? = ARemoteForecastLoader(httpClient: client, url: url)
+        
+        var capturedError = [ARemoteForecastLoader.Result]()
+        sut?.load{ capturedError.append($0) }
+        
+        let (_, itemJSON) = makeItem()
+        let jsonData = try! JSONSerialization.data(withJSONObject: itemJSON)
+        
+        sut = nil
+        client.complete(withStatusCode: 200, with: jsonData)
+        
+        XCTAssertTrue(capturedError.isEmpty)
     }
     
     //MARK: Helpers
