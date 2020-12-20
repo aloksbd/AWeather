@@ -5,7 +5,12 @@
 //  Created by Alok Subedi on 19/12/2020.
 //
 
-struct AForecast: Decodable, Equatable{
-    private let city: City
-    let forecastList: [ADailyForecast]
+public struct AForecast: Decodable, Equatable{
+    public let city: City
+    public let forecastList: [ADailyForecast]
+    
+    public init(city: City, forecastList: [ADailyForecast]){
+        self.city = city
+        self.forecastList = forecastList
+    }
 }

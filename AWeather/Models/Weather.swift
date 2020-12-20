@@ -5,6 +5,6 @@
 //  Created by Alok Subedi on 19/12/2020.
 //
 
-struct Weather: Decodable, Equatable{
-    let main: String
+public struct Weather: Decodable, Equatable{
+    public let main: String
 }
