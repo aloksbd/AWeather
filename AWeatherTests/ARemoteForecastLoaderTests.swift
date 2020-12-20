@@ -14,6 +14,7 @@ class ARemoteForecastLoader{
     
     enum Error: Swift.Error{
         case connectivity
+        case invalidData
     }
     
     init(httpClient: HTTPClientSpy, url: URL){
@@ -22,23 +23,34 @@ class ARemoteForecastLoader{
     }
     
     func load(completion: @escaping (Error) -> ()){
-        httpClient.get(from: url){ error in
-            completion(.connectivity)
+        httpClient.get(from: url){ error,response  in
+            if response != nil{
+                completion(.invalidData)
+            }else{
+                completion(.connectivity)
+            }
         }
     }
 }
 
 class HTTPClientSpy{
     var requestedUrls = [URL]()
-    var completions = [(Error) -> ()]()
+    var completions = [(Error?, HTTPURLResponse?) -> ()]()
     
-    func get(from url: URL,completion: @escaping (Error) -> ()) {
+    func get(from url: URL,completion: @escaping (Error?, HTTPURLResponse?) -> ()) {
         completions.append(completion)
         requestedUrls.append(url)
     }
     
     func complete(with error: Error, at index: Int = 0){
-        completions[index](error)
+        completions[index](error, nil)
+    }
+    
+    func complete(withStatusCode code: Int, at  index: Int = 0){
+        let response = HTTPURLResponse(url: requestedUrls[index], statusCode: code,
+            httpVersion: nil,
+            headerFields: nil)
+        completions[index](nil,response)
     }
 }
 
@@ -78,6 +90,17 @@ class ARemoteForecastLoaderTests: XCTestCase {
         client.complete(with: clientError)
         
         XCTAssertEqual(capturedError, [.connectivity])
+    }
+    
+    func test_load_deliversErrorOnFailure(){
+        let (sut,client) = makeSUT()
+        
+        var capturedError = [ARemoteForecastLoader.Error]()
+        sut.load{ capturedError.append($0) }
+        
+        client.complete(withStatusCode: 400)
+        
+        XCTAssertEqual(capturedError, [.invalidData])
     }
     
     //MARK: Helpers
