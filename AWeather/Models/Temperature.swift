@@ -12,4 +12,13 @@ public struct Temperature: Decodable, Equatable{
     public let night: String
     public let morn: String
     public let eve: String
+    
+    public init(min: String, max: String, day: String, night: String, morn: String, eve: String){
+        self.min = min
+        self.max = max
+        self.day = day
+        self.night = night
+        self.morn = morn
+        self.eve = eve
+    }
 }

@@ -6,7 +6,7 @@
 //
 
 import Foundation
-@testable import AWeather
+import AWeather
 
 func makeItem() -> (item: AForecast, json: [String : Any]){
     let weather = Weather(main: "sunny")

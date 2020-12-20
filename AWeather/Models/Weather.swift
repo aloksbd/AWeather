@@ -7,4 +7,8 @@
 
 public struct Weather: Decodable, Equatable{
     public let main: String
+    
+    public init(main: String){
+        self.main = main
+    }
 }
