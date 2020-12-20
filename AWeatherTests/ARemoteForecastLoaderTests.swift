@@ -18,12 +18,16 @@ class ARemoteForecastLoader{
     }
     
     func load(){
-        httpClient.requestedUrls.append(url)
+        httpClient.get(from: url)
     }
 }
 
 class HTTPClientSpy{
     var requestedUrls = [URL]()
+    
+    func get(from url: URL){
+        requestedUrls.append(url)
+    }
 }
 
 class ARemoteForecastLoaderTests: XCTestCase {
