@@ -138,11 +138,98 @@ class ARemoteForecastLoaderTests: XCTestCase {
         }
     }
     
+    func test_load_deliversForecastOn200Response(){
+        let (sut,client) = makeSUT()
+        let (forecastItem, forecastItemJSON) = makeItem()
+        
+        expect(sut: sut, toCompleteWith: .success(forecastItem), when: {
+            let jsonData = try! JSONSerialization.data(withJSONObject: forecastItemJSON)
+            client.complete(withStatusCode: 200, with: jsonData)
+        })
+    }
+    
     //MARK: Helpers
     
     private func makeSUT(url: URL = URL(string: "https://url.com")!) -> (sut: ARemoteForecastLoader, client: HTTPClientSpy){
         let client = HTTPClientSpy()
         let sut = ARemoteForecastLoader(httpClient: client, url: url)
         return (sut,client)
+    }
+    
+    func expect(sut: ARemoteForecastLoader, toCompleteWith expectedResult: ARemoteForecastLoader.Result, when action: () -> (),file: StaticString = #file, line: UInt = #line){
+        let exp = expectation(description: "wait for loadImage")
+        
+        sut.load{ recievedResult in
+            switch (recievedResult,expectedResult){
+            case let (.failure(recievedError),.failure(expectedError)):
+                XCTAssertEqual(recievedError as NSError?, expectedError as NSError?)
+            case let (.success(recievedForecast), .success(expectedForecast)):
+                XCTAssertEqual(recievedForecast, expectedForecast)
+            default:
+                break
+            }
+            exp.fulfill()
+        }
+        
+        action()
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func makeItem() -> (item: AForecast, json: [String : Any]){
+        
+        let weather = Weather(main: "sunny")
+        let weatherJSON = [
+            "main": weather.main
+        ]
+        
+        let temperature = Temperature(
+            min: "12",
+            max: "12",
+            day: "12",
+            night: "12",
+            morn: "12",
+            eve: "12")
+        let temperatureJSON = [
+            "min": temperature.min,
+            "max": temperature.max,
+            "day": temperature.day,
+            "night": temperature.night,
+            "morn": temperature.morn,
+            "eve": temperature.eve
+        ]
+        
+        let dailyForecast = ADailyForecast(
+            dt: "1234543",
+            sunrise: "1235543",
+            sunset: "1234123",
+            humidity: "123",
+            speed: "12",
+            pop: "12%",
+            snow: "32",
+            weather: weather,
+            temperature: temperature
+        )
+        let dailyForecastJSON = [
+            "dt": dailyForecast.dt,
+            "sunrise": dailyForecast.sunrise,
+            "sunset": dailyForecast.sunset,
+            "humidity": dailyForecast.humidity ?? "",
+            "speed": dailyForecast.speed ?? "",
+            "pop": dailyForecast.pop ?? "",
+            "snow": dailyForecast.snow ?? "",
+            "weather": weatherJSON,
+            "temperature": temperatureJSON
+        ] as [String : Any]
+        
+        let city = City(name: "Ktm")
+        let cityJSON = ["name": city.name]
+        
+        let forecastItem = AForecast(city: city, list: [dailyForecast])
+        let forecastItemJSON = [
+            "city": cityJSON,
+            "list": [dailyForecastJSON]
+        ] as [String : Any]
+        
+        return(forecastItem, forecastItemJSON)
     }
 }
