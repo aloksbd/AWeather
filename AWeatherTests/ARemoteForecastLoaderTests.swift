@@ -8,7 +8,13 @@
 import XCTest
 @testable import AWeather
 
-class ARemoteForecastLoader{
+protocol AForecastLoader{
+    typealias Result = Swift.Result<Data, Error>
+
+    func load(completion: @escaping (AForecastLoader.Result) -> ())
+}
+
+class ARemoteForecastLoader: AForecastLoader{
     private var url: URL
     private var httpClient: HTTPClientSpy
     
@@ -22,12 +28,12 @@ class ARemoteForecastLoader{
         self.url = url
     }
     
-    func load(completion: @escaping (Error) -> ()){
+    func load(completion: @escaping (AForecastLoader.Result) -> ()){
         httpClient.get(from: url){ error,response  in
             if response != nil{
-                completion(.invalidData)
+                completion(.failure(Error.invalidData))
             }else{
-                completion(.connectivity)
+                completion(.failure(Error.connectivity))
             }
         }
     }
@@ -84,7 +90,14 @@ class ARemoteForecastLoaderTests: XCTestCase {
         let (sut,client) = makeSUT()
         
         var capturedError = [ARemoteForecastLoader.Error]()
-        sut.load{ capturedError.append($0) }
+        sut.load{ result in
+            switch result{
+            case let .failure(error as ARemoteForecastLoader.Error):
+                capturedError.append(error)
+            default:
+                break
+            }
+        }
         
         let clientError = NSError(domain: "Test", code: 0)
         client.complete(with: clientError)
@@ -98,7 +111,14 @@ class ARemoteForecastLoaderTests: XCTestCase {
         let codes = [100,199,300,404,500]
         codes.enumerated().forEach { (index, code) in
             var capturedError = [ARemoteForecastLoader.Error]()
-            sut.load{ capturedError.append($0) }
+            sut.load{ result in
+                switch result{
+                case let .failure(error as ARemoteForecastLoader.Error):
+                    capturedError.append(error)
+                default:
+                    break
+                }
+            }
             
             client.complete(withStatusCode: code, at: index)
             XCTAssertEqual(capturedError, [.invalidData])
