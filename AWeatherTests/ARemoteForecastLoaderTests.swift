@@ -92,7 +92,7 @@ class ARemoteForecastLoaderTests: XCTestCase {
         XCTAssertEqual(capturedError, [.connectivity])
     }
     
-    func test_load_deliversErrorOnFailure(){
+    func test_load_deliversErrorOnNon200Response(){
         let (sut,client) = makeSUT()
         
         let codes = [100,199,300,404,500]
