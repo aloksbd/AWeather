@@ -138,6 +138,25 @@ class ARemoteForecastLoaderTests: XCTestCase {
         }
     }
     
+    func test_load_deliversNoItemOn200HTTPResponseWithEmptyJSONList(){
+        let (sut,client) = makeSUT()
+
+        var capturedResult = [AForecast]()
+        let emptyListJSON = Data("{}".utf8)
+        
+        sut.load{result in
+            switch result{
+            case let .success(forecast):
+                capturedResult.append(forecast)
+            default:
+                break
+            }
+        }
+
+        client.complete(withStatusCode: 200, with: emptyListJSON)
+        XCTAssertEqual(capturedResult, [])
+    }
+    
     //MARK: Helpers
     
     private func makeSUT(url: URL = URL(string: "https://url.com")!) -> (sut: ARemoteForecastLoader, client: HTTPClientSpy){
