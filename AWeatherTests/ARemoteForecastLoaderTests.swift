@@ -6,72 +6,7 @@
 //
 
 import XCTest
-@testable import AWeather
-
-protocol AForecastLoader{
-    typealias Result = Swift.Result<AForecast, Error>
-
-    func load(completion: @escaping (AForecastLoader.Result) -> ())
-}
-
-class ARemoteForecastLoader: AForecastLoader{
-    private var url: URL
-    private var httpClient: HTTPClientSpy
-    
-    enum Error: Swift.Error{
-        case connectivity
-        case invalidData
-    }
-    
-    init(httpClient: HTTPClientSpy, url: URL){
-        self.httpClient = httpClient
-        self.url = url
-    }
-    
-    func load(completion: @escaping (AForecastLoader.Result) -> ()){
-        httpClient.get(from: url){ [weak self] result in
-            guard self != nil else { return }
-            switch result{
-            case .failure(_):
-                completion(.failure(Error.connectivity))
-            case  let .success(data):
-                if let data = data{
-                    if let forecast = try? JSONDecoder().decode(AForecast.self, from: data){
-                        completion(.success(forecast))
-                    }else{
-                        completion(.failure(Error.invalidData))
-                    }
-                }else{
-                    completion(.failure(Error.invalidData))
-                }
-            }
-        }
-    }
-}
-
-protocol HTTPClient{
-    typealias Result = Swift.Result<Data?, Error>
-    func get(from url: URL, completion: @escaping (HTTPClient.Result) -> ())
-}
-
-class HTTPClientSpy: HTTPClient{
-    
-    var requestedUrls = [URL]()
-    var completions = [(HTTPClient.Result) -> ()]()
-    
-    func get(from url: URL,completion: @escaping (HTTPClient.Result) -> ()) {
-        completions.append(completion)
-        requestedUrls.append(url)
-    }
-    
-    func complete(with error: Error, at index: Int = 0){
-        completions[index](.failure(error))
-    }
-    
-    func complete(withStatusCode code: Int, with data: Data, at  index: Int = 0){
-        completions[index](.success(data))
-    }
-}
+import AWeather
 
 class ARemoteForecastLoaderTests: XCTestCase {
 
@@ -194,6 +129,25 @@ class ARemoteForecastLoaderTests: XCTestCase {
         
         action()
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    private class HTTPClientSpy: HTTPClient{
+        
+        var requestedUrls = [URL]()
+        var completions = [(HTTPClient.Result) -> ()]()
+        
+        func get(from url: URL,completion: @escaping (HTTPClient.Result) -> ()) {
+            completions.append(completion)
+            requestedUrls.append(url)
+        }
+        
+        func complete(with error: Error, at index: Int = 0){
+            completions[index](.failure(error))
+        }
+        
+        func complete(withStatusCode code: Int, with data: Data, at  index: Int = 0){
+            completions[index](.success(data))
+        }
     }
 }
 
