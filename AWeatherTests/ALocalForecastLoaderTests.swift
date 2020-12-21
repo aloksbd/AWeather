@@ -56,6 +56,10 @@ class CacheStore{
     func completeInsertion(with error: NSError, at index: Int = 0){
         insertionCompletions[index](error)
     }
+    
+    func completeInsertionSuccessfully(at index: Int = 0){
+        insertionCompletions[index](nil)
+    }
 }
 
 class ALocalForecastLoaderTests: XCTestCase {
@@ -126,6 +130,24 @@ class ALocalForecastLoaderTests: XCTestCase {
         
         wait(for: [exp], timeout: 1.0)
         XCTAssertEqual(receivedError as NSError?, insertionError)
+    }
+    
+    func test_save_succedsOnSuccessfulInsertion(){
+        let (sut, store) = makeSUT()
+        let item = forecastItem()
+        
+        let exp = expectation(description: "Wait for the block")
+        var receivedError: Error?
+        sut.save(item) { error in
+            receivedError = error
+            exp.fulfill()
+        }
+        
+        store.completeDeletionSuccessfully()
+        store.completeInsertionSuccessfully()
+        
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertNil(receivedError)
     }
     
     //MARK: helpers
