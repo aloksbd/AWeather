@@ -27,8 +27,8 @@ public class ARemoteForecastLoader: AForecastLoader{
             switch result{
             case .failure(_):
                 completion(.failure(Error.connectivity))
-            case  let .success(data):
-                if let data = data{
+            case  let .success((data, response)):
+                if response.statusCode == 200{
                     if let forecast = try? JSONDecoder().decode(AForecast.self, from: data){
                         completion(.success(forecast))
                     }else{

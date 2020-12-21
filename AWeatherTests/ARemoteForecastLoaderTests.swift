@@ -118,11 +118,11 @@ class ARemoteForecastLoaderTests: XCTestCase {
         sut.load{ recievedResult in
             switch (recievedResult,expectedResult){
             case let (.failure(recievedError),.failure(expectedError)):
-                XCTAssertEqual(recievedError as NSError?, expectedError as NSError?)
+                XCTAssertEqual(recievedError as NSError?, expectedError as NSError?, file: file, line: line)
             case let (.success(recievedForecast), .success(expectedForecast)):
-                XCTAssertEqual(recievedForecast, expectedForecast)
+                XCTAssertEqual(recievedForecast, expectedForecast, file: file, line: line)
             default:
-                break
+                XCTFail("Expected result \(expectedResult) got \(recievedResult)", file: file, line: line)
             }
             exp.fulfill()
         }
@@ -146,7 +146,10 @@ class ARemoteForecastLoaderTests: XCTestCase {
         }
         
         func complete(withStatusCode code: Int, with data: Data, at  index: Int = 0){
-            completions[index](.success(data))
+            let response = HTTPURLResponse(url: requestedUrls[index], statusCode: code,
+                httpVersion: nil,
+                headerFields: nil)!
+            completions[index](.success((data,response)))
         }
     }
 }
