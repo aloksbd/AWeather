@@ -36,6 +36,12 @@ class AWeatherCacheStore{
         userDefaults.setValue(data, forKey: CACHE)
         completion(nil)
     }
+    
+    func deleteCacheFeed(completion: @escaping CacheStore.DeletionCompletion){
+        userDefaults.removeObject(forKey: CACHE)
+        completion(nil)
+    }
+        
 }
 
 class AWeatherCacheStoreTests: XCTestCase {
@@ -65,7 +71,7 @@ class AWeatherCacheStoreTests: XCTestCase {
         let exp = expectation(description: "wait for retrieval block")
 
         sut.insert(item) { insertionError in
-            XCTAssertNil(insertionError, "expected feed to be inserted successfully")
+            XCTAssertNil(insertionError, "expected item to be inserted successfully")
             sut.retrieve { retrieveResult in
                 switch (retrieveResult){
                 case let .success(forecast):
@@ -87,7 +93,7 @@ class AWeatherCacheStoreTests: XCTestCase {
         let exp = expectation(description: "wait for retrieval block")
         
         sut.insert(item) { insertionError in
-            XCTAssertNil(insertionError, "expected feed to be inserted successfully")
+            XCTAssertNil(insertionError, "expected item to be inserted successfully")
             sut.retrieve { firstRetrieveResult in
                 sut.retrieve { secondRetrieveResult in
                     switch (firstRetrieveResult, secondRetrieveResult){
@@ -126,6 +132,45 @@ class AWeatherCacheStoreTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_delete_doesNothingOnEmptyCache(){
+        let sut = makeSUT()
+        
+        let exp = expectation(description: "wait for deletion block")
+        
+        sut.deleteCacheFeed{ deletionError in
+            XCTAssertNil(deletionError, "expected item to be deleted successfully")
+            exp.fulfill()
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+
+    func test_delete_emptiesPreviouslyInsertedCache(){
+        let sut = makeSUT()
+        
+        let exp = expectation(description: "wait for deletion block")
+        
+        sut.insert(forecastItem()){ insertionError in
+            XCTAssertNil(insertionError, "expected item to be inserted successfully")
+            sut.deleteCacheFeed{
+                deletionError in
+                XCTAssertNil(deletionError, "expected item to be deleted successfully")
+                sut.retrieve{retrievalResult in
+                    switch retrievalResult{
+                    case let .success(forecast):
+                        XCTAssertNil(forecast)
+                    default:
+                        XCTFail("expected nil forecast")
+                    }
+                }
+                exp.fulfill()
+            }
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    
     //MARK: Helpers
     
     private func makeSUT() -> AWeatherCacheStore{
@@ -153,6 +198,10 @@ class AWeatherCacheStoreTests: XCTestCase {
         
         override func data(forKey defaultName: String) -> Data? {
             return savedData as? Data
+        }
+        
+        override func removeObject(forKey defaultName: String) {
+            savedData = nil
         }
     }
     
