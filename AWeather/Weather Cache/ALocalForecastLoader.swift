@@ -30,3 +30,17 @@ public class ALocalForecastLoader{
         }
     }
 }
+
+extension ALocalForecastLoader: AForecastLoader{
+    public func load(completion: @escaping (AForecastLoader.Result) -> ()){
+        store.retrieve{[weak self] result in
+            guard self != nil else {return}
+            switch result{
+            case let .failure(error):
+                completion(.failure(error))
+            case let .success(forecast):
+                completion(.success(forecast))
+            }
+       }
+   }
+}

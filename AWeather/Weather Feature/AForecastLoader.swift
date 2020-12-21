@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol AForecastLoader{
-    typealias Result = Swift.Result<AForecast, Error>
+    typealias Result = Swift.Result<AForecast?, Error>
     
     func load(completion: @escaping (AForecastLoader.Result) -> ())
 }
