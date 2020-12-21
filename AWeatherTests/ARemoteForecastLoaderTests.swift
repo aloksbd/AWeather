@@ -113,7 +113,7 @@ class ARemoteForecastLoaderTests: XCTestCase {
     }
     
     func expect(sut: ARemoteForecastLoader, toCompleteWith expectedResult: ARemoteForecastLoader.Result, when action: () -> (),file: StaticString = #file, line: UInt = #line){
-        let exp = expectation(description: "wait for loadImage")
+        let exp = expectation(description: "wait for load")
         
         sut.load{ recievedResult in
             switch (recievedResult,expectedResult){

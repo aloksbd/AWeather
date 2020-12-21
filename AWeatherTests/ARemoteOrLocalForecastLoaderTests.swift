@@ -18,15 +18,41 @@ class ARemoteOrLocalForecastLoader{
     }
     
     func load(completion: @escaping (Result<AForecast?, Error>) -> ()) {
-        remoteLoader.load{_ in}
+        remoteLoader.load{[unowned self] result in
+            switch result{
+            case let .failure(error):
+                if let error = error as? ARemoteForecastLoader.Error, error == ARemoteForecastLoader.Error.connectivity{
+                    self.localLoader.load(completion: completion)
+                }
+            default:
+                break
+            }
+            completion(.success(nil))
+        }
     }
 }
 
 class ARemoteForecastLoaderSpy: AForecastLoader{
     var loadCallCount = 0
+    var completion: ((AForecastLoader.Result) -> ())? = nil
     
-    func load(completion: @escaping (Result<AForecast?, Error>) -> ()) {
+    func load(completion: @escaping (AForecastLoader.Result) -> ()) {
         loadCallCount += 1
+        if self.completion == nil{
+            self.completion = completion
+        }
+    }
+    
+    func completeWithConnectivityError(){
+        if let completion = completion{
+            completion(.failure(ARemoteForecastLoader.Error.connectivity))
+        }
+    }
+    
+    func completeWithInvalidDataError(){
+        if let completion = completion{
+            completion(.failure(ARemoteForecastLoader.Error.invalidData))
+        }
     }
 }
 
@@ -35,7 +61,7 @@ class ALocalForecastLoaderSpy: AForecastLoader{
     var loadCallCount = 0
     
     func load(completion: @escaping (Result<AForecast?, Error>) -> ()) {
-        
+        loadCallCount += 1
     }
     
     
@@ -53,13 +79,24 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
     }
     
     func test_load_callLoadOnRemoteOnce(){
-        let (sut, localLoader,remoteLoader)  = makeSUT()
+        let (sut, localLoader,remoteLoader) = makeSUT()
         
         sut.load{_ in}
         
         XCTAssertEqual(remoteLoader.loadCallCount, 1)
         XCTAssertEqual(localLoader.loadCallCount, 0)
         
+    }
+    
+    func test_load_callLoadOnLocalOnceIfRemoteGivesConnectivityError(){
+        let (sut, localLoader,remoteLoader) = makeSUT()
+        
+        sut.load{_ in}
+        
+        remoteLoader.completeWithConnectivityError()
+        
+        XCTAssertEqual(remoteLoader.loadCallCount, 1)
+        XCTAssertEqual(localLoader.loadCallCount, 1)
     }
     
     //MARK: helpers
