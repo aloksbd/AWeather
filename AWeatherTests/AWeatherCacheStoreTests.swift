@@ -21,8 +21,11 @@ class AWeatherCacheStore{
         guard let data = userDefaults.data(forKey: CACHE) else {
             return completion(.success(nil))
         }
-        let cacheForecast = try! JSONDecoder().decode(AForecast.self, from: data)
-        completion(.success(cacheForecast))
+        if let cacheForecast = try? JSONDecoder().decode(AForecast.self, from: data){
+            completion(.success(cacheForecast))
+        }else{
+            completion(.failure(anyNSError()))
+        }
         
     }
     
@@ -97,6 +100,27 @@ class AWeatherCacheStoreTests: XCTestCase {
                     exp.fulfill()
                 }
             }
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_retrieve_deliversErrorOnRetrievalError(){
+        let userDefault = UserDefaultsSpy()
+        let sut = AWeatherCacheStore(userDefaults: userDefault)
+        
+        userDefault.setValue(Data("data".utf8), forKey: "cache")
+        
+        let exp = expectation(description: "wait for retrieval block")
+        
+        sut.retrieve { retrieveResult in
+            switch (retrieveResult){
+            case let .failure(error):
+                XCTAssertNotNil(error)
+            default:
+                XCTFail("expected failure")
+            }
+            exp.fulfill()
         }
         
         wait(for: [exp], timeout: 1.0)
