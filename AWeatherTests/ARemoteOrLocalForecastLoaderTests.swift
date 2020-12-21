@@ -8,43 +8,6 @@
 import XCTest
 import AWeather
 
-class ARemoteOrLocalForecastLoader{
-    private var remoteLoader: AForecastLoader
-    private var localLoader: AForecastLoader
-    
-    public enum Error: Swift.Error{
-        case cacheError
-    }
-    
-    init (remoteLoader: AForecastLoader, localLoader: AForecastLoader){
-        self.remoteLoader = remoteLoader
-        self.localLoader = localLoader
-    }
-    
-    func load(completion: @escaping (Result<AForecast?, Swift.Error>) -> ()) {
-        remoteLoader.load{[unowned self] result in
-            switch result{
-            case .failure(_):
-                self.localLoader.load(completion: completion)
-            case let .success(forecast):
-                completion(.success(forecast))
-            }
-        }
-    }
-    
-    private func loadFromCache(completion: @escaping (Result<AForecast?, Swift.Error>) -> ()) {
-        localLoader.load{ result in
-            switch result{
-            case let .failure(error):
-                completion(.failure(error))
-            default:
-                break
-            }
-        }
-    }
-}
-
-
 class ARemoteOrLocalForecastLoaderTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromLocalOrRemote(){
