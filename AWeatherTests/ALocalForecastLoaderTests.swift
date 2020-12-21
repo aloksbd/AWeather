@@ -97,57 +97,30 @@ class ALocalForecastLoaderTests: XCTestCase {
     
     func test_save_failsOnDeletionError(){
         let (sut, store) = makeSUT()
-        let item = forecastItem()
         let deletionError = anyNSError()
         
-        let exp = expectation(description: "Wait for the block")
-        var receivedError: Error?
-        sut.save(item) { error in
-            receivedError = error
-            exp.fulfill()
-        }
-        
-        store.completeDeletion(with: deletionError)
-        
-        wait(for: [exp], timeout: 1.0)
-        XCTAssertEqual(receivedError as NSError?, deletionError)
+        expect(sut: sut, toCompleteWithError: deletionError, when: {
+            store.completeDeletion(with: deletionError)
+        })
     }
     
     func test_save_failsOnInsertionError(){
         let (sut, store) = makeSUT()
-        let item = forecastItem()
         let insertionError = anyNSError()
         
-        let exp = expectation(description: "Wait for the block")
-        var receivedError: Error?
-        sut.save(item) { error in
-            receivedError = error
-            exp.fulfill()
+        expect(sut: sut, toCompleteWithError: insertionError) {
+            store.completeDeletionSuccessfully()
+            store.completeInsertion(with: insertionError)
         }
-        
-        store.completeDeletionSuccessfully()
-        store.completeInsertion(with: insertionError)
-        
-        wait(for: [exp], timeout: 1.0)
-        XCTAssertEqual(receivedError as NSError?, insertionError)
     }
     
     func test_save_succedsOnSuccessfulInsertion(){
         let (sut, store) = makeSUT()
-        let item = forecastItem()
         
-        let exp = expectation(description: "Wait for the block")
-        var receivedError: Error?
-        sut.save(item) { error in
-            receivedError = error
-            exp.fulfill()
+        expect(sut: sut, toCompleteWithError: nil) {
+            store.completeDeletionSuccessfully()
+            store.completeInsertionSuccessfully()
         }
-        
-        store.completeDeletionSuccessfully()
-        store.completeInsertionSuccessfully()
-        
-        wait(for: [exp], timeout: 1.0)
-        XCTAssertNil(receivedError)
     }
     
     //MARK: helpers
@@ -159,6 +132,20 @@ class ALocalForecastLoaderTests: XCTestCase {
         trackForMemoryLeak(sut,file: file, line: line)
         
         return (sut,store)
+    }
+    
+    func expect(sut: ALocalForecastLoader, toCompleteWithError expectedError: NSError?, when action: () -> (),file: StaticString = #file, line: UInt = #line){
+        let exp = expectation(description: "Wait for the block")
+        var receivedError: Error?
+        sut.save(forecastItem()) { error in
+            receivedError = error
+            exp.fulfill()
+        }
+        
+        action()
+        
+        wait(for: [exp], timeout: 1.0)
+        XCTAssertEqual(receivedError as NSError?, expectedError)
     }
     
     func forecastItem() -> AForecast{
