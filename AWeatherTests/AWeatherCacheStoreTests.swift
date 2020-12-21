@@ -11,8 +11,14 @@ import AWeather
 class AWeatherCacheStore{
     private let CACHE = "cache"
     
+    private let userDefaults: UserDefaults
+    
+    init(userDefaults: UserDefaults = UserDefaults.standard){
+        self.userDefaults = userDefaults
+    }
+    
     func retrieve(completion: @escaping (CacheStore.RetrievalResult) -> ()){
-        guard let data = UserDefaults.standard.data(forKey: CACHE) else {
+        guard let data = userDefaults.data(forKey: CACHE) else {
             return completion(.success(nil))
         }
         let cacheForecast = try! JSONDecoder().decode(AForecast.self, from: data)
@@ -22,9 +28,9 @@ class AWeatherCacheStore{
     
     func insert(_ item: AForecast, completion: @escaping CacheStore.InsertionCompletion){
         guard let data = try? JSONEncoder().encode(item) else {
-            return
+            return completion(anyNSError())
         }
-        UserDefaults.standard.setValue(data, forKey: CACHE)
+        userDefaults.setValue(data, forKey: CACHE)
         completion(nil)
     }
 }
@@ -32,7 +38,7 @@ class AWeatherCacheStore{
 class AWeatherCacheStoreTests: XCTestCase {
 
     func test_retrieve_deliversNilOnEmptyCache(){
-        let sut = AWeatherCacheStore()
+        let sut = AWeatherCacheStore(userDefaults: UserDefaultsSpy())
         
         let exp = expectation(description: "wait for retrieval block")
         
@@ -50,7 +56,7 @@ class AWeatherCacheStoreTests: XCTestCase {
     }
     
     func test_retrieveAfterInsertingToEmptyCache_deliversInsertedValue(){
-        let sut = AWeatherCacheStore()
+        let sut = AWeatherCacheStore(userDefaults: UserDefaultsSpy())
         let item = forecastItem()
 
         let exp = expectation(description: "wait for retrieval block")
@@ -70,5 +76,27 @@ class AWeatherCacheStoreTests: XCTestCase {
 
         wait(for: [exp], timeout: 1.0)
     }
-
+    
+    class UserDefaultsSpy : UserDefaults {
+        
+        private var savedData: Any?
+        
+        convenience init() {
+            self.init(suiteName: "spyUserDefaults")!
+        }
+        
+        override init?(suiteName suitename: String?) {
+            UserDefaults().removePersistentDomain(forName: suitename!)
+            super.init(suiteName: suitename)
+        }
+        
+        override func setValue(_ value: Any?, forKey key: String) {
+            savedData = value
+        }
+        
+        override func data(forKey defaultName: String) -> Data? {
+            return savedData as? Data
+        }
+    }
+    
 }
