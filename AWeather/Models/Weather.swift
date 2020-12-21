@@ -5,6 +5,10 @@
 //  Created by Alok Subedi on 19/12/2020.
 //
 
-struct Weather: Decodable, Equatable{
-    let main: String
+public struct Weather: Codable, Equatable{
+    public let main: String
+    
+    public init(main: String){
+        self.main = main
+    }
 }

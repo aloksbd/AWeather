@@ -5,6 +5,10 @@
 //  Created by Alok Subedi on 19/12/2020.
 //
 
-struct City: Decodable, Equatable{
-    let name: String
+public struct City: Codable, Equatable{
+    public let name: String
+    
+    public init(name: String) {
+        self.name = name
+    }
 }
