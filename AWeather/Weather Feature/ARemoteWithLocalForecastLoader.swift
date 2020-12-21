@@ -1,5 +1,5 @@
 //
-//  ARemoteOrLocalForecastLoader.swift
+//  ARemoteWithLocalForecastLoader.swift
 //  AWeather
 //
 //  Created by Alok Subedi on 21/12/2020.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class ARemoteOrLocalForecastLoader{
+public class ARemoteWithLocalForecastLoader{
     private var remoteLoader: AForecastLoader
     private var localLoader: AForecastLoader
     

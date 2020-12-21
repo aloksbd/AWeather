@@ -111,11 +111,11 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
     
     //MARK: helpers
     
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ARemoteOrLocalForecastLoader, localLoader: ALocalForecastLoaderSpy, remoteLoader: ARemoteForecastLoaderSpy){
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ARemoteWithLocalForecastLoader, localLoader: ALocalForecastLoaderSpy, remoteLoader: ARemoteForecastLoaderSpy){
         
         let localLoader = ALocalForecastLoaderSpy()
         let remoteLoader = ARemoteForecastLoaderSpy()
-        let sut = ARemoteOrLocalForecastLoader(remoteLoader: remoteLoader, localLoader: localLoader)
+        let sut = ARemoteWithLocalForecastLoader(remoteLoader: remoteLoader, localLoader: localLoader)
         
         trackForMemoryLeak(localLoader, file: file, line: line)
         trackForMemoryLeak(remoteLoader, file: file, line: line)
