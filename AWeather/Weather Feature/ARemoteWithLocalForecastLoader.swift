@@ -30,15 +30,4 @@ public class ARemoteWithLocalForecastLoader{
             }
         }
     }
-    
-    private func loadFromCache(completion: @escaping (Result<AForecast?, Swift.Error>) -> ()) {
-        localLoader.load{ result in
-            switch result{
-            case let .failure(error):
-                completion(.failure(error))
-            default:
-                break
-            }
-        }
-    }
 }
