@@ -44,57 +44,6 @@ class ARemoteOrLocalForecastLoader{
     }
 }
 
-class ARemoteForecastLoaderSpy: AForecastLoader{
-    var loadCallCount = 0
-    var completion: ((AForecastLoader.Result) -> ())? = nil
-    
-    func load(completion: @escaping (AForecastLoader.Result) -> ()) {
-        loadCallCount += 1
-        if self.completion == nil{
-            self.completion = completion
-        }
-    }
-    
-    func completeWithError(){
-        if let completion = completion{
-            completion(.failure(anyNSError()))
-        }
-    }
-    
-    func complete(with item: AForecast){
-        if let completion = completion{
-            completion(.success(item))
-        }
-    }
-}
-
-class ALocalForecastLoaderSpy: AForecastLoader{
-    
-    var loadCallCount = 0
-    var completion: ((AForecastLoader.Result) -> ())? = nil
-    
-    func load(completion: @escaping (Result<AForecast?, Error>) -> ()) {
-        loadCallCount += 1
-        if self.completion == nil{
-            self.completion = completion
-        }
-    }
-    
-    func completewithError(){
-        if let completion = completion{
-            completion(.failure(anyNSError()))
-        }
-    }
-    
-    func complete(with item: AForecast){
-        if let completion = completion{
-            completion(.success(item))
-        }
-    }
-    
-}
-
-
 
 class ARemoteOrLocalForecastLoaderTests: XCTestCase {
 
@@ -165,7 +114,7 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
             exp.fulfill()
         }
         remoteLoader.completeWithError()
-        localLoader.completewithError()
+        localLoader.completeWithError()
         
         XCTAssertEqual(remoteLoader.loadCallCount, 1)
         XCTAssertEqual(localLoader.loadCallCount, 1)
@@ -211,4 +160,33 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
         
         return (sut, localLoader, remoteLoader)
     }
+    
+    
+    class AforecastLoaderSpy: AForecastLoader{
+        var loadCallCount = 0
+        var completion: ((AForecastLoader.Result) -> ())? = nil
+        
+        func load(completion: @escaping (AForecastLoader.Result) -> ()) {
+            loadCallCount += 1
+            if self.completion == nil{
+                self.completion = completion
+            }
+        }
+        
+        func completeWithError(){
+            if let completion = completion{
+                completion(.failure(anyNSError()))
+            }
+        }
+        
+        func complete(with item: AForecast){
+            if let completion = completion{
+                completion(.success(item))
+            }
+        }
+    }
+
+    class ARemoteForecastLoaderSpy: AforecastLoaderSpy{}
+
+    class ALocalForecastLoaderSpy: AforecastLoaderSpy{}
 }
