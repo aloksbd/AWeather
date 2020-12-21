@@ -9,13 +9,13 @@ import Foundation
 
 public class ARemoteWithLocalForecastLoader: AForecastLoader{
     private var remoteLoader: AForecastLoader
-    private var localLoader: AForecastLoader
+    private var localLoader: ALocalForecastLoader
     
     public enum Error: Swift.Error{
         case cacheError
     }
     
-    public init (remoteLoader: AForecastLoader, localLoader: AForecastLoader){
+    public init (remoteLoader: AForecastLoader, localLoader: ALocalForecastLoader){
         self.remoteLoader = remoteLoader
         self.localLoader = localLoader
     }
@@ -27,6 +27,9 @@ public class ARemoteWithLocalForecastLoader: AForecastLoader{
             case .failure(_):
                 self.localLoader.load(completion: completion)
             case let .success(forecast):
+                if let forecast = forecast{
+                    self.localLoader.save(forecast){_ in}
+                }
                 completion(.success(forecast))
             }
         }
