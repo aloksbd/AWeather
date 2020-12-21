@@ -38,7 +38,7 @@ class AWeatherCacheStore{
 class AWeatherCacheStoreTests: XCTestCase {
 
     func test_retrieve_deliversNilOnEmptyCache(){
-        let sut = AWeatherCacheStore(userDefaults: UserDefaultsSpy())
+        let sut = makeSUT()
         
         let exp = expectation(description: "wait for retrieval block")
         
@@ -56,7 +56,7 @@ class AWeatherCacheStoreTests: XCTestCase {
     }
     
     func test_retrieveAfterInsertingToEmptyCache_deliversInsertedValue(){
-        let sut = AWeatherCacheStore(userDefaults: UserDefaultsSpy())
+        let sut = makeSUT()
         let item = forecastItem()
 
         let exp = expectation(description: "wait for retrieval block")
@@ -75,6 +75,39 @@ class AWeatherCacheStoreTests: XCTestCase {
         }
 
         wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_retrieve_deliversSameForecastTwiceOnNonEmptyCache(){
+        let sut = makeSUT()
+        let item = forecastItem()
+        
+        let exp = expectation(description: "wait for retrieval block")
+        
+        sut.insert(item) { insertionError in
+            XCTAssertNil(insertionError, "expected feed to be inserted successfully")
+            sut.retrieve { firstRetrieveResult in
+                sut.retrieve { secondRetrieveResult in
+                    switch (firstRetrieveResult, secondRetrieveResult){
+                    case let (.success(firstForecast), .success(secondForecast)):
+                        XCTAssertEqual(firstForecast, item)
+                        XCTAssertEqual(firstForecast, secondForecast)
+                    default:
+                        XCTFail("expected success with \(item)")
+                    }
+                    exp.fulfill()
+                }
+            }
+        }
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    //MARK: Helpers
+    
+    private func makeSUT() -> AWeatherCacheStore{
+        let sut = AWeatherCacheStore(userDefaults: UserDefaultsSpy())
+        trackForMemoryLeak(sut)
+        return sut
     }
     
     class UserDefaultsSpy : UserDefaults {
