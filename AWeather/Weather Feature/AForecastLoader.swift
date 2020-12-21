@@ -5,8 +5,6 @@
 //  Created by Alok Subedi on 20/12/2020.
 //
 
-import Foundation
-
 public protocol AForecastLoader{
     typealias Result = Swift.Result<AForecast?, Error>
     

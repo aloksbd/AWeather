@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 public class AWeatherCacheStore: CacheStore{
     private let CACHE = "cache"
     
