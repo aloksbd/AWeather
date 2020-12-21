@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5CB717A9258FB72300F09D1D /* AWeatherHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717A8258FB72300F09D1D /* AWeatherHTTPClientTests.swift */; };
+		5CB717AF25904D4900F09D1D /* AWeatherHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717AE25904D4900F09D1D /* AWeatherHTTPClient.swift */; };
 		5CCC0126258DE711004FD118 /* AWeather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CCC011C258DE710004FD118 /* AWeather.framework */; };
 		5CCC0141258E0F07004FD118 /* AForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0140258E0F07004FD118 /* AForecast.swift */; };
 		5CCC0146258E126F004FD118 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0145258E126F004FD118 /* City.swift */; };
@@ -33,6 +34,7 @@
 
 /* Begin PBXFileReference section */
 		5CB717A8258FB72300F09D1D /* AWeatherHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWeatherHTTPClientTests.swift; sourceTree = "<group>"; };
+		5CB717AE25904D4900F09D1D /* AWeatherHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWeatherHTTPClient.swift; sourceTree = "<group>"; };
 		5CCC011C258DE710004FD118 /* AWeather.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AWeather.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CCC011F258DE710004FD118 /* AWeather.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWeather.h; sourceTree = "<group>"; };
 		5CCC0120258DE710004FD118 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -143,6 +145,7 @@
 			isa = PBXGroup;
 			children = (
 				5CCC0187258FAB78004FD118 /* HTTPClient.swift */,
+				5CB717AE25904D4900F09D1D /* AWeatherHTTPClient.swift */,
 			);
 			path = "Weather Remote";
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CCC0150258E12B4004FD118 /* Weather.swift in Sources */,
+				5CB717AF25904D4900F09D1D /* AWeatherHTTPClient.swift in Sources */,
 				5CCC0141258E0F07004FD118 /* AForecast.swift in Sources */,
 				5CCC0188258FAB78004FD118 /* HTTPClient.swift in Sources */,
 				5CCC0146258E126F004FD118 /* City.swift in Sources */,

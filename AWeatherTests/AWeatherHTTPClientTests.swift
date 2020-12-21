@@ -8,28 +8,6 @@
 import XCTest
 import AWeather
 
-class AWeatherHTTPClient: HTTPClient{
-    private let session: URLSession
-    
-    public init(session: URLSession = .shared){
-        self.session = session
-    }
-    
-    private struct UnexpectedValuesRepresentation: Error{}
-    
-    public func get(from url: URL, completion: @escaping(HTTPClient.Result) -> Void){
-        session.dataTask(with: url){ data, response, error in
-            if let error = error{
-                completion(.failure(error))
-            }else if let data = data, let response = response as? HTTPURLResponse{
-                completion(.success((data, response)))
-            }else{
-                completion(.failure(UnexpectedValuesRepresentation()))
-            }
-        }.resume()
-    }
-}
-
 class AWeatherHTTPClientTests: XCTestCase {
     
     override func setUp() {
@@ -131,7 +109,7 @@ class AWeatherHTTPClientTests: XCTestCase {
         let result = resultFor(data: data, response: response, error: error, file:file, line: line)
         
         switch result{
-        case let .success(receivedData, receivedResponse):
+        case let .success((receivedData, receivedResponse)):
              return(receivedData,receivedResponse)
         default:
             XCTFail("expected success, got \(result)",file: file, line: line)
