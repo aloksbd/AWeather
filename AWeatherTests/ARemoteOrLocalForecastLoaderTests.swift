@@ -13,7 +13,7 @@ class ARemoteOrLocalForecastLoader{
     private var localLoader: AForecastLoader
     
     public enum Error: Swift.Error{
-        case serverError
+        case cacheError
     }
     
     init (remoteLoader: AForecastLoader, localLoader: AForecastLoader){
@@ -24,21 +24,21 @@ class ARemoteOrLocalForecastLoader{
     func load(completion: @escaping (Result<AForecast?, Swift.Error>) -> ()) {
         remoteLoader.load{[unowned self] result in
             switch result{
-            case let .failure(error):
-                handle(error, completion: completion)
+            case .failure(_):
+                self.localLoader.load(completion: completion)
             case let .success(forecast):
                 completion(.success(forecast))
             }
         }
     }
     
-    private func handle(_ error: Swift.Error, completion: @escaping (Result<AForecast?, Swift.Error>) -> ()){
-        if let error = error as? ARemoteForecastLoader.Error{
-            switch error{
-            case .connectivity:
-                self.localLoader.load(completion: completion)
-            case .invalidData:
-                completion(.failure(Error.serverError))
+    private func loadFromCache(completion: @escaping (Result<AForecast?, Swift.Error>) -> ()) {
+        localLoader.load{ result in
+            switch result{
+            case let .failure(error):
+                completion(.failure(error))
+            default:
+                break
             }
         }
     }
@@ -55,15 +55,9 @@ class ARemoteForecastLoaderSpy: AForecastLoader{
         }
     }
     
-    func completeWithConnectivityError(){
+    func completeWithError(){
         if let completion = completion{
-            completion(.failure(ARemoteForecastLoader.Error.connectivity))
-        }
-    }
-    
-    func completeWithInvalidDataError(){
-        if let completion = completion{
-            completion(.failure(ARemoteForecastLoader.Error.invalidData))
+            completion(.failure(anyNSError()))
         }
     }
     
@@ -77,11 +71,26 @@ class ARemoteForecastLoaderSpy: AForecastLoader{
 class ALocalForecastLoaderSpy: AForecastLoader{
     
     var loadCallCount = 0
+    var completion: ((AForecastLoader.Result) -> ())? = nil
     
     func load(completion: @escaping (Result<AForecast?, Error>) -> ()) {
         loadCallCount += 1
+        if self.completion == nil{
+            self.completion = completion
+        }
     }
     
+    func completewithError(){
+        if let completion = completion{
+            completion(.failure(anyNSError()))
+        }
+    }
+    
+    func complete(with item: AForecast){
+        if let completion = completion{
+            completion(.success(item))
+        }
+    }
     
 }
 
@@ -106,35 +115,12 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
         
     }
     
-    func test_load_deliversServerErrorIfRemoteGivesInvalidDataError(){
-        let (sut, localLoader,remoteLoader) = makeSUT()
-
-        let exp = expectation(description: "wait for load")
-
-        sut.load{result in
-            switch result{
-            case let .failure(error):
-                XCTAssertNotNil(error)
-            default:
-                XCTFail("should give server error")
-            }
-            exp.fulfill()
-        }
-
-        remoteLoader.completeWithInvalidDataError()
-
-        XCTAssertEqual(remoteLoader.loadCallCount, 1)
-        XCTAssertEqual(localLoader.loadCallCount, 0)
-
-        wait(for: [exp], timeout: 1.0)
-    }
-    
-    func test_load_callLoadOnLocalOnceIfRemoteGivesConnectivityError(){
+    func test_load_callLoadOnLocalOnceIfRemoteGivesError(){
         let (sut, localLoader,remoteLoader) = makeSUT()
         
         sut.load{_ in}
         
-        remoteLoader.completeWithConnectivityError()
+        remoteLoader.completeWithError()
         
         XCTAssertEqual(remoteLoader.loadCallCount, 1)
         XCTAssertEqual(localLoader.loadCallCount, 1)
@@ -160,6 +146,53 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
         
         XCTAssertEqual(remoteLoader.loadCallCount, 1)
         XCTAssertEqual(localLoader.loadCallCount, 0)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func test_load_deliversErrorIfLocalLoaderGivesError(){
+        let (sut, localLoader,remoteLoader) = makeSUT()
+        
+        let exp = expectation(description: "wait for load")
+        
+        sut.load{result in
+            switch result{
+            case let .failure(error):
+               XCTAssertNotNil(error)
+            default:
+                XCTFail("should give error")
+            }
+            exp.fulfill()
+        }
+        remoteLoader.completeWithError()
+        localLoader.completewithError()
+        
+        XCTAssertEqual(remoteLoader.loadCallCount, 1)
+        XCTAssertEqual(localLoader.loadCallCount, 1)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
+    func returnsForecastOnLocalLoadSuccessful(){
+        let (sut, localLoader,remoteLoader) = makeSUT()
+        let item = forecastItem()
+        
+        let exp = expectation(description: "wait for load")
+        
+        sut.load{result in
+            switch result{
+            case let .success(forecast):
+                XCTAssertEqual(item, forecast)
+            default:
+                XCTFail("should give item")
+            }
+            exp.fulfill()
+        }
+        remoteLoader.completeWithError()
+        localLoader.complete(with: item)
+        
+        XCTAssertEqual(remoteLoader.loadCallCount, 1)
+        XCTAssertEqual(localLoader.loadCallCount, 1)
         
         wait(for: [exp], timeout: 1.0)
     }
