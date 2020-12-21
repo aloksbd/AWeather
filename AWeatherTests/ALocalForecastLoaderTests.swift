@@ -8,64 +8,6 @@
 import XCTest
 import AWeather
 
-class ALocalForecastLoader{
-    private let store: CacheStore
-    init(store: CacheStore){
-        self.store = store
-    }
-    
-    func save(_ items: AForecast, completion: @escaping (Error?) -> ()){
-        store.deleteCacheFeed{  [weak self ] error in
-            guard let self = self else{return}
-            if error == nil{
-                self.store.insert(items){ [weak self] error in
-                    guard  self != nil else{return}
-                    completion(error)
-                }
-            }else{
-                completion(error)
-            }
-        }
-    }
-}
-
-class CacheStore{
-    typealias DeletionCompletion = (Error?) -> Void
-    typealias InsertionCompletion = (Error?) -> Void
-    
-    var deleteCacheCallCount = 0
-    var insertCallCount = 0
-    
-    private var deletionCompletions = [DeletionCompletion]()
-    private var insertionCompletions = [InsertionCompletion]()
-    
-    func deleteCacheFeed(completion: @escaping DeletionCompletion){
-        deleteCacheCallCount += 1
-        deletionCompletions.append(completion)
-    }
-    
-    func completeDeletion(with error: NSError,at index: Int = 0){
-        deletionCompletions[index](error)
-    }
-    
-    func completeDeletionSuccessfully(at index: Int = 0){
-        deletionCompletions[index](nil)
-    }
-    
-    func insert(_ items: AForecast, completion: @escaping InsertionCompletion){
-        insertCallCount += 1
-        insertionCompletions.append(completion)
-    }
-    
-    func completeInsertion(with error: NSError, at index: Int = 0){
-        insertionCompletions[index](error)
-    }
-    
-    func completeInsertionSuccessfully(at index: Int = 0){
-        insertionCompletions[index](nil)
-    }
-}
-
 class ALocalForecastLoaderTests: XCTestCase {
     func test_init_doesNotDeleteCacheUponCreation(){
         let (_, store) = makeSUT()
@@ -128,7 +70,7 @@ class ALocalForecastLoaderTests: XCTestCase {
     }
     
     func test_save_doeesnotDeliverDeletionErrorAfterSUTInstanceIsDeallocated(){
-        let store = CacheStore()
+        let store = CacheStoreSpy()
         var sut: ALocalForecastLoader? = ALocalForecastLoader(store: store)
         
         var receivedResults = [Error?]()
@@ -141,7 +83,7 @@ class ALocalForecastLoaderTests: XCTestCase {
     }
     
     func test_save_doeesnotDeliverInsertionErrorAfterSUTInstanceIsDeallocated(){
-        let store = CacheStore()
+        let store = CacheStoreSpy()
         var sut: ALocalForecastLoader? = ALocalForecastLoader(store: store)
         
         var receivedResults = [Error?]()
@@ -155,8 +97,8 @@ class ALocalForecastLoaderTests: XCTestCase {
     }
     
     //MARK: helpers
-    func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut:ALocalForecastLoader, store: CacheStore){
-        let store = CacheStore()
+    func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut:ALocalForecastLoader, store: CacheStoreSpy){
+        let store = CacheStoreSpy()
         let sut = ALocalForecastLoader(store: store)
         
         trackForMemoryLeak(store,file: file, line: line)
@@ -185,5 +127,44 @@ class ALocalForecastLoaderTests: XCTestCase {
     
     func anyNSError() -> NSError{
         return NSError(domain: "any error", code: 0)
+    }
+    
+    
+    class CacheStoreSpy: CacheStore{
+        
+        typealias DeletionCompletion = (Error?) -> Void
+        typealias InsertionCompletion = (Error?) -> Void
+        
+        var deleteCacheCallCount = 0
+        var insertCallCount = 0
+        
+        private var deletionCompletions = [DeletionCompletion]()
+        private var insertionCompletions = [InsertionCompletion]()
+        
+        func deleteCacheFeed(completion: @escaping DeletionCompletion){
+            deleteCacheCallCount += 1
+            deletionCompletions.append(completion)
+        }
+        
+        func completeDeletion(with error: NSError,at index: Int = 0){
+            deletionCompletions[index](error)
+        }
+        
+        func completeDeletionSuccessfully(at index: Int = 0){
+            deletionCompletions[index](nil)
+        }
+        
+        func insert(_ item: AForecast, completion: @escaping InsertionCompletion){
+            insertCallCount += 1
+            insertionCompletions.append(completion)
+        }
+        
+        func completeInsertion(with error: NSError, at index: Int = 0){
+            insertionCompletions[index](error)
+        }
+        
+        func completeInsertionSuccessfully(at index: Int = 0){
+            insertionCompletions[index](nil)
+        }
     }
 }

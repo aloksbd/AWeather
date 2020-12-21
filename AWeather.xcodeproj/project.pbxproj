@@ -10,6 +10,8 @@
 		5CB717A9258FB72300F09D1D /* AWeatherHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717A8258FB72300F09D1D /* AWeatherHTTPClientTests.swift */; };
 		5CB717AF25904D4900F09D1D /* AWeatherHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717AE25904D4900F09D1D /* AWeatherHTTPClient.swift */; };
 		5CB717B325905B2000F09D1D /* ALocalForecastLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717B225905B2000F09D1D /* ALocalForecastLoaderTests.swift */; };
+		5CB717B825906E5400F09D1D /* ALocalForecastLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717B725906E5400F09D1D /* ALocalForecastLoader.swift */; };
+		5CB717BC25906F1E00F09D1D /* CacheStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717BB25906F1E00F09D1D /* CacheStore.swift */; };
 		5CCC0126258DE711004FD118 /* AWeather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CCC011C258DE710004FD118 /* AWeather.framework */; };
 		5CCC0141258E0F07004FD118 /* AForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0140258E0F07004FD118 /* AForecast.swift */; };
 		5CCC0146258E126F004FD118 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0145258E126F004FD118 /* City.swift */; };
@@ -37,6 +39,8 @@
 		5CB717A8258FB72300F09D1D /* AWeatherHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWeatherHTTPClientTests.swift; sourceTree = "<group>"; };
 		5CB717AE25904D4900F09D1D /* AWeatherHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWeatherHTTPClient.swift; sourceTree = "<group>"; };
 		5CB717B225905B2000F09D1D /* ALocalForecastLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ALocalForecastLoaderTests.swift; sourceTree = "<group>"; };
+		5CB717B725906E5400F09D1D /* ALocalForecastLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ALocalForecastLoader.swift; sourceTree = "<group>"; };
+		5CB717BB25906F1E00F09D1D /* CacheStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheStore.swift; sourceTree = "<group>"; };
 		5CCC011C258DE710004FD118 /* AWeather.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AWeather.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CCC011F258DE710004FD118 /* AWeather.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWeather.h; sourceTree = "<group>"; };
 		5CCC0120258DE710004FD118 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -73,6 +77,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5CB717B625906E3300F09D1D /* Weather Cache */ = {
+			isa = PBXGroup;
+			children = (
+				5CB717B725906E5400F09D1D /* ALocalForecastLoader.swift */,
+				5CB717BB25906F1E00F09D1D /* CacheStore.swift */,
+			);
+			path = "Weather Cache";
+			sourceTree = "<group>";
+		};
 		5CCC0112258DE710004FD118 = {
 			isa = PBXGroup;
 			children = (
@@ -94,6 +107,7 @@
 		5CCC011E258DE710004FD118 /* AWeather */ = {
 			isa = PBXGroup;
 			children = (
+				5CB717B625906E3300F09D1D /* Weather Cache */,
 				5CCC0186258FAB4C004FD118 /* Weather Remote */,
 				5CCC0144258E1244004FD118 /* Models */,
 				5CCC013F258E0DD4004FD118 /* Weather Feature */,
@@ -119,7 +133,6 @@
 			isa = PBXGroup;
 			children = (
 				5CCC017C258FAAB3004FD118 /* AForecastLoader.swift */,
-				5CCC0182258FAB2A004FD118 /* ARemoteForecastLoader.swift */,
 			);
 			path = "Weather Feature";
 			sourceTree = "<group>";
@@ -147,6 +160,7 @@
 		5CCC0186258FAB4C004FD118 /* Weather Remote */ = {
 			isa = PBXGroup;
 			children = (
+				5CCC0182258FAB2A004FD118 /* ARemoteForecastLoader.swift */,
 				5CCC0187258FAB78004FD118 /* HTTPClient.swift */,
 				5CB717AE25904D4900F09D1D /* AWeatherHTTPClient.swift */,
 			);
@@ -265,11 +279,13 @@
 				5CCC0150258E12B4004FD118 /* Weather.swift in Sources */,
 				5CB717AF25904D4900F09D1D /* AWeatherHTTPClient.swift in Sources */,
 				5CCC0141258E0F07004FD118 /* AForecast.swift in Sources */,
+				5CB717B825906E5400F09D1D /* ALocalForecastLoader.swift in Sources */,
 				5CCC0188258FAB78004FD118 /* HTTPClient.swift in Sources */,
 				5CCC0146258E126F004FD118 /* City.swift in Sources */,
 				5CCC017D258FAAB3004FD118 /* AForecastLoader.swift in Sources */,
 				5CCC0154258E12D4004FD118 /* Temperature.swift in Sources */,
 				5CCC014A258E1291004FD118 /* ADailyForecast.swift in Sources */,
+				5CB717BC25906F1E00F09D1D /* CacheStore.swift in Sources */,
 				5CCC0183258FAB2A004FD118 /* ARemoteForecastLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
