@@ -6,23 +6,46 @@
 //
 
 import XCTest
-
+import AWeather
 
 class ALocalForecastLoader{
-    init(store: LocalStore){
-        
+    private let store: CacheStore
+    init(store: CacheStore){
+        self.store = store
+    }
+    
+    func save(_ items: AForecast){
+        store.deleteCacheFeed()
     }
 }
 
-class LocalStore{
-    var deletCacheFeedCallCount = 0
+class CacheStore{
+    var deletCacheCallCount = 0
+    
+    func deleteCacheFeed(){
+        deletCacheCallCount += 1
+    }
 }
 
 class ALocalForecastLoaderTests: XCTestCase {
     func test_init_doesNotDeleteCacheUponCreation(){
-        let store = LocalStore()
+        let store = CacheStore()
         _ = ALocalForecastLoader(store: store)
         
-        XCTAssertEqual(store.deletCacheFeedCallCount, 0)
+        XCTAssertEqual(store.deletCacheCallCount, 0)
+    }
+    
+    func test_save_requestsCacheDeletion(){
+        let store = CacheStore()
+        let sut = ALocalForecastLoader(store: store)
+        let item = forecastItem()
+        sut.save(item)
+        XCTAssertEqual(store.deletCacheCallCount, 1)
+    }
+    
+    //MARK: helpers
+    
+    func forecastItem() -> AForecast{
+        return makeItem().item
     }
 }
