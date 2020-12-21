@@ -7,7 +7,7 @@
 
 import Foundation
 
-public class ARemoteWithLocalForecastLoader{
+public class ARemoteWithLocalForecastLoader: AForecastLoader{
     private var remoteLoader: AForecastLoader
     private var localLoader: AForecastLoader
     
@@ -21,7 +21,8 @@ public class ARemoteWithLocalForecastLoader{
     }
     
     public func load(completion: @escaping (Result<AForecast?, Swift.Error>) -> ()) {
-        remoteLoader.load{[unowned self] result in
+        remoteLoader.load{[weak self] result in
+            guard  let self = self else{return}
             switch result{
             case .failure(_):
                 self.localLoader.load(completion: completion)

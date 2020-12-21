@@ -6,14 +6,14 @@
 //
 
 public struct Temperature: Codable, Equatable{
-    public let min: String
-    public let max: String
-    public let day: String
-    public let night: String
-    public let morn: String
-    public let eve: String
+    public let min: Double
+    public let max: Double
+    public let day: Double
+    public let night: Double
+    public let morn: Double
+    public let eve: Double
     
-    public init(min: String, max: String, day: String, night: String, morn: String, eve: String){
+    public init(min: Double, max: Double, day: Double, night: Double, morn: Double, eve: Double){
         self.min = min
         self.max = max
         self.day = day
