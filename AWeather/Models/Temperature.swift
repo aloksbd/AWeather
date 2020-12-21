@@ -5,7 +5,7 @@
 //  Created by Alok Subedi on 19/12/2020.
 //
 
-public struct Temperature: Decodable, Equatable{
+public struct Temperature: Codable, Equatable{
     public let min: String
     public let max: String
     public let day: String

@@ -5,7 +5,7 @@
 //  Created by Alok Subedi on 19/12/2020.
 //
 
-public struct ADailyForecast: Decodable, Equatable{
+public struct ADailyForecast: Codable, Equatable{
     public let dt: String
     public let sunrise: String
     public let sunset: String
