@@ -26,8 +26,8 @@ class ARemoteOrLocalForecastLoader{
             switch result{
             case let .failure(error):
                 handle(error, completion: completion)
-            default:
-                break
+            case let .success(forecast):
+                completion(.success(forecast))
             }
         }
     }
@@ -64,6 +64,12 @@ class ARemoteForecastLoaderSpy: AForecastLoader{
     func completeWithInvalidDataError(){
         if let completion = completion{
             completion(.failure(ARemoteForecastLoader.Error.invalidData))
+        }
+    }
+    
+    func complete(with item: AForecast){
+        if let completion = completion{
+            completion(.success(item))
         }
     }
 }
@@ -132,6 +138,30 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
         
         XCTAssertEqual(remoteLoader.loadCallCount, 1)
         XCTAssertEqual(localLoader.loadCallCount, 1)
+    }
+    
+    func test_load_returnsForecastOnRemoteLoadSuccessful(){
+        
+        let (sut, localLoader,remoteLoader) = makeSUT()
+        
+        let item = forecastItem()
+        let exp = expectation(description: "wait for load")
+        
+        sut.load{result in
+            switch result{
+            case let .success(forecast):
+                XCTAssertEqual(item, forecast)
+            default:
+                XCTFail("should give item")
+            }
+            exp.fulfill()
+        }
+        remoteLoader.complete(with: item)
+        
+        XCTAssertEqual(remoteLoader.loadCallCount, 1)
+        XCTAssertEqual(localLoader.loadCallCount, 0)
+        
+        wait(for: [exp], timeout: 1.0)
     }
     
     //MARK: helpers
