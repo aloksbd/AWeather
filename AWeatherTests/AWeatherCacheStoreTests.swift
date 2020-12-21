@@ -8,42 +8,6 @@
 import XCTest
 import AWeather
 
-class AWeatherCacheStore{
-    private let CACHE = "cache"
-    
-    private let userDefaults: UserDefaults
-    
-    init(userDefaults: UserDefaults = UserDefaults.standard){
-        self.userDefaults = userDefaults
-    }
-    
-    func retrieve(completion: @escaping (CacheStore.RetrievalResult) -> ()){
-        guard let data = userDefaults.data(forKey: CACHE) else {
-            return completion(.success(nil))
-        }
-        if let cacheForecast = try? JSONDecoder().decode(AForecast.self, from: data){
-            completion(.success(cacheForecast))
-        }else{
-            completion(.failure(anyNSError()))
-        }
-        
-    }
-    
-    func insert(_ item: AForecast, completion: @escaping CacheStore.InsertionCompletion){
-        guard let data = try? JSONEncoder().encode(item) else {
-            return completion(anyNSError())
-        }
-        userDefaults.setValue(data, forKey: CACHE)
-        completion(nil)
-    }
-    
-    func deleteCacheFeed(completion: @escaping CacheStore.DeletionCompletion){
-        userDefaults.removeObject(forKey: CACHE)
-        completion(nil)
-    }
-        
-}
-
 class AWeatherCacheStoreTests: XCTestCase {
 
     func test_retrieve_deliversNilOnEmptyCache(){

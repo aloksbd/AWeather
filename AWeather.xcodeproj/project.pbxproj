@@ -15,6 +15,7 @@
 		5CB717C025908EA600F09D1D /* CacheStoreSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717BF25908EA600F09D1D /* CacheStoreSpy.swift */; };
 		5CB717C425908EDF00F09D1D /* Factories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717C325908EDF00F09D1D /* Factories.swift */; };
 		5CB717C82590908A00F09D1D /* AWeatherCacheStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717C72590908A00F09D1D /* AWeatherCacheStoreTests.swift */; };
+		5CB717CE2590CD0300F09D1D /* AWeatherCacheStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717CD2590CD0300F09D1D /* AWeatherCacheStore.swift */; };
 		5CCC0126258DE711004FD118 /* AWeather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CCC011C258DE710004FD118 /* AWeather.framework */; };
 		5CCC0141258E0F07004FD118 /* AForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0140258E0F07004FD118 /* AForecast.swift */; };
 		5CCC0146258E126F004FD118 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0145258E126F004FD118 /* City.swift */; };
@@ -47,6 +48,7 @@
 		5CB717BF25908EA600F09D1D /* CacheStoreSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheStoreSpy.swift; sourceTree = "<group>"; };
 		5CB717C325908EDF00F09D1D /* Factories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Factories.swift; sourceTree = "<group>"; };
 		5CB717C72590908A00F09D1D /* AWeatherCacheStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWeatherCacheStoreTests.swift; sourceTree = "<group>"; };
+		5CB717CD2590CD0300F09D1D /* AWeatherCacheStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWeatherCacheStore.swift; sourceTree = "<group>"; };
 		5CCC011C258DE710004FD118 /* AWeather.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AWeather.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CCC011F258DE710004FD118 /* AWeather.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWeather.h; sourceTree = "<group>"; };
 		5CCC0120258DE710004FD118 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 			children = (
 				5CB717B725906E5400F09D1D /* ALocalForecastLoader.swift */,
 				5CB717BB25906F1E00F09D1D /* CacheStore.swift */,
+				5CB717CD2590CD0300F09D1D /* AWeatherCacheStore.swift */,
 			);
 			path = "Weather Cache";
 			sourceTree = "<group>";
@@ -286,6 +289,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5CCC0150258E12B4004FD118 /* Weather.swift in Sources */,
+				5CB717CE2590CD0300F09D1D /* AWeatherCacheStore.swift in Sources */,
 				5CB717AF25904D4900F09D1D /* AWeatherHTTPClient.swift in Sources */,
 				5CCC0141258E0F07004FD118 /* AForecast.swift in Sources */,
 				5CB717B825906E5400F09D1D /* ALocalForecastLoader.swift in Sources */,
