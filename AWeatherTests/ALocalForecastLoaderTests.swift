@@ -15,20 +15,36 @@ class ALocalForecastLoader{
     }
     
     func save(_ items: AForecast){
-        store.deleteCacheFeed()
+        store.deleteCacheFeed{ [unowned self ] error in
+            if error == nil{
+                self.store.insert(items)
+            }
+        }
     }
 }
 
 class CacheStore{
+    typealias DeletionCompletion = (Error?) -> Void
     var deleteCacheCallCount = 0
     var insertCallCount = 0
     
-    func deleteCacheFeed(){
+    private var deletionCompletions = [DeletionCompletion]()
+    
+    func deleteCacheFeed(completion: @escaping DeletionCompletion){
         deleteCacheCallCount += 1
+        deletionCompletions.append(completion)
     }
     
-    func deletion(with error: NSError,at index: Int = 0){
-        
+    func completeDeletion(with error: NSError,at index: Int = 0){
+        deletionCompletions[index](error)
+    }
+    
+    func completeDeletionSuccessfully(at index: Int = 0){
+        deletionCompletions[index](nil)
+    }
+    
+    func insert(_ items: AForecast){
+        insertCallCount += 1
     }
 }
 
@@ -52,8 +68,17 @@ class ALocalForecastLoaderTests: XCTestCase {
         let deletionError = anyNSError()
         
         sut.save(item)
-        store.deletion(with: deletionError)
+        store.completeDeletion(with: deletionError)
         XCTAssertEqual(store.insertCallCount, 0)
+    }
+    
+    func test_save_requestsCacheInsertionOnDeletionSuccess(){
+        let (sut, store) = makeSUT()
+        let item = forecastItem()
+        
+        sut.save(item)
+        store.completeDeletionSuccessfully()
+        XCTAssertEqual(store.insertCallCount, 1 )
     }
     
     //MARK: helpers
