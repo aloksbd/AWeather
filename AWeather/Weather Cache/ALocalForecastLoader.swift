@@ -11,7 +11,16 @@ public class ALocalForecastLoader{
     public init(store: CacheStore){
         self.store = store
     }
-    
+   
+    private func cache(item: AForecast, completion: @escaping (Error?) -> ()){
+        self.store.insert(item){ [weak self] error in
+            guard  self != nil else{return}
+            completion(error)
+        }
+    }
+}
+
+extension ALocalForecastLoader: AForcastCacheSaver{
     public func save(_ item: AForecast, completion: @escaping (Error?) -> ()){
         store.deleteCacheFeed{  [weak self ] error in
             guard let self = self else{return}
@@ -20,13 +29,6 @@ public class ALocalForecastLoader{
             }else{
                 completion(error)
             }
-        }
-    }
-    
-    private func cache(item: AForecast, completion: @escaping (Error?) -> ()){
-        self.store.insert(item){ [weak self] error in
-            guard  self != nil else{return}
-            completion(error)
         }
     }
 }

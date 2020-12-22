@@ -31,7 +31,7 @@ class DailyForecastViewController: UIViewController {
         let remoteLoader = ARemoteForecastLoader(httpClient: client, url:url)
         let store = AWeatherCacheStore()
         let localLoader = ALocalForecastLoader(store: store)
-        loader = ARemoteWithLocalForecastLoader(remoteLoader: remoteLoader, localLoader: localLoader) 
+        loader = ARemoteWithLocalForecastLoader(remoteLoader: remoteLoader, localLoader: localLoader, localSaver: localLoader) 
         
         loader.load{ [weak self] result in
             guard let self = self else {return}

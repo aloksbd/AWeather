@@ -11,14 +11,14 @@ import AWeather
 class ARemoteOrLocalForecastLoaderTests: XCTestCase {
 
     func test_init_doesNotRequestDataFromLocalOrRemote(){
-        let (_, localLoader,remoteLoader)  = makeSUT()
+        let (_, localLoader,remoteLoader,_)  = makeSUT()
         
         XCTAssertEqual(remoteLoader.loadCallCount, 0)
         XCTAssertEqual(localLoader.loadCallCount, 0)
     }
     
     func test_load_callLoadOnRemoteOnce(){
-        let (sut, localLoader,remoteLoader) = makeSUT()
+        let (sut, localLoader,remoteLoader,_) = makeSUT()
         
         sut.load{_ in}
         
@@ -28,7 +28,7 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
     }
     
     func test_load_callLoadOnLocalOnceIfRemoteGivesError(){
-        let (sut, localLoader,remoteLoader) = makeSUT()
+        let (sut, localLoader,remoteLoader,_) = makeSUT()
         
         sut.load{_ in}
         
@@ -40,7 +40,7 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
     
     func test_load_returnsForecastOnRemoteLoadSuccessful(){
         
-        let (sut, localLoader,remoteLoader) = makeSUT()
+        let (sut, localLoader,remoteLoader,_) = makeSUT()
         
         let item = forecastItem()
         let exp = expectation(description: "wait for load")
@@ -62,8 +62,33 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_load_savesForecastOnCacheOnRemoteLoadSuccessful(){
+        
+        let (sut, localLoader,remoteLoader,localSaver) = makeSUT()
+        
+        let item = forecastItem()
+        let exp = expectation(description: "wait for load")
+        
+        sut.load{result in
+            switch result{
+            case let .success(forecast):
+                XCTAssertEqual(item, forecast)
+            default:
+                XCTFail("should give item")
+            }
+            exp.fulfill()
+        }
+        remoteLoader.complete(with: item)
+        
+        XCTAssertEqual(remoteLoader.loadCallCount, 1)
+        XCTAssertEqual(localLoader.loadCallCount, 0)
+        XCTAssertEqual(localSaver.saveCallCount, 1)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     func test_load_deliversErrorIfLocalLoaderGivesError(){
-        let (sut, localLoader,remoteLoader) = makeSUT()
+        let (sut, localLoader,remoteLoader,_) = makeSUT()
         
         let exp = expectation(description: "wait for load")
         
@@ -86,7 +111,7 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
     }
     
     func returnsForecastOnLocalLoadSuccessful(){
-        let (sut, localLoader,remoteLoader) = makeSUT()
+        let (sut, localLoader,remoteLoader,_) = makeSUT()
         let item = forecastItem()
         
         let exp = expectation(description: "wait for load")
@@ -111,17 +136,19 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
     
     //MARK: helpers
     
-    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ARemoteWithLocalForecastLoader, localLoader: ALocalForecastLoaderSpy, remoteLoader: ARemoteForecastLoaderSpy){
+    private func makeSUT(file: StaticString = #file, line: UInt = #line) -> (sut: ARemoteWithLocalForecastLoader, localLoader: ALocalForecastLoaderSpy, remoteLoader: ARemoteForecastLoaderSpy, localSaver: ALocalForecastSaverSpy){
         
         let localLoader = ALocalForecastLoaderSpy()
         let remoteLoader = ARemoteForecastLoaderSpy()
-        let sut = ARemoteWithLocalForecastLoader(remoteLoader: remoteLoader, localLoader: localLoader)
+        let localSaver = ALocalForecastSaverSpy()
+        let sut = ARemoteWithLocalForecastLoader(remoteLoader: remoteLoader, localLoader: localLoader, localSaver: localSaver)
         
         trackForMemoryLeak(localLoader, file: file, line: line)
         trackForMemoryLeak(remoteLoader, file: file, line: line)
+        trackForMemoryLeak(localSaver, file: file, line: line)
         trackForMemoryLeak(sut, file: file, line: line)
         
-        return (sut, localLoader, remoteLoader)
+        return (sut, localLoader, remoteLoader, localSaver)
     }
     
     
@@ -152,4 +179,14 @@ class ARemoteOrLocalForecastLoaderTests: XCTestCase {
     class ARemoteForecastLoaderSpy: AforecastLoaderSpy{}
 
     class ALocalForecastLoaderSpy: AforecastLoaderSpy{}
+    
+    class ALocalForecastSaverSpy: AForcastCacheSaver{
+        
+        var saveCallCount = 0
+        
+        
+            func save(_ item: AForecast, completion: @escaping (Error?) -> ()) {
+                saveCallCount += 1
+            }
+    }
 }

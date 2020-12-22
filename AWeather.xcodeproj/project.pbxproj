@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5C89A6F92591B94600F8B116 /* AForcastCacheSaver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5C89A6F82591B94600F8B116 /* AForcastCacheSaver.swift */; };
 		5CB717A9258FB72300F09D1D /* AWeatherHTTPClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717A8258FB72300F09D1D /* AWeatherHTTPClientTests.swift */; };
 		5CB717AF25904D4900F09D1D /* AWeatherHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717AE25904D4900F09D1D /* AWeatherHTTPClient.swift */; };
 		5CB717B325905B2000F09D1D /* ALocalForecastLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB717B225905B2000F09D1D /* ALocalForecastLoaderTests.swift */; };
@@ -67,6 +68,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5C89A6F82591B94600F8B116 /* AForcastCacheSaver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AForcastCacheSaver.swift; sourceTree = "<group>"; };
 		5CB717A8258FB72300F09D1D /* AWeatherHTTPClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWeatherHTTPClientTests.swift; sourceTree = "<group>"; };
 		5CB717AE25904D4900F09D1D /* AWeatherHTTPClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AWeatherHTTPClient.swift; sourceTree = "<group>"; };
 		5CB717B225905B2000F09D1D /* ALocalForecastLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ALocalForecastLoaderTests.swift; sourceTree = "<group>"; };
@@ -158,6 +160,7 @@
 				5CB717B725906E5400F09D1D /* ALocalForecastLoader.swift */,
 				5CB717BB25906F1E00F09D1D /* CacheStore.swift */,
 				5CB717CD2590CD0300F09D1D /* AWeatherCacheStore.swift */,
+				5C89A6F82591B94600F8B116 /* AForcastCacheSaver.swift */,
 			);
 			path = "Weather Cache";
 			sourceTree = "<group>";
@@ -533,6 +536,7 @@
 				5CCC0188258FAB78004FD118 /* HTTPClient.swift in Sources */,
 				5CCC0146258E126F004FD118 /* City.swift in Sources */,
 				5CCC017D258FAAB3004FD118 /* AForecastLoader.swift in Sources */,
+				5C89A6F92591B94600F8B116 /* AForcastCacheSaver.swift in Sources */,
 				5CCC0154258E12D4004FD118 /* Temperature.swift in Sources */,
 				5CCC014A258E1291004FD118 /* ADailyForecast.swift in Sources */,
 				5CB717BC25906F1E00F09D1D /* CacheStore.swift in Sources */,
