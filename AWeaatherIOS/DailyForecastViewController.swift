@@ -10,7 +10,7 @@ import AWeather
 
 class DailyForecastViewController: UIViewController {
     let cellId = "forecastCell"
-    var loader: AForecastLoader!
+    var forecastLoader: AForecastLoader!
     
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var todaysDateLabel: UILabel!
@@ -25,32 +25,27 @@ class DailyForecastViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-        let client = AWeatherHTTPClient()
-        let url = URL(string: "http://api.openweathermap.org/data/2.5/forecast/daily?q=Kathmandu&units=metric&cnt=10&appid=4375694cabc41be5f7ebee4ecbd3fc03")!
-        let remoteLoader = ARemoteForecastLoader(httpClient: client, url:url)
-        let store = AWeatherCacheStore()
-        let localLoader = ALocalForecastLoader(store: store)
-        loader = ARemoteWithLocalForecastLoader(remoteLoader: remoteLoader, localLoader: localLoader, localSaver: localLoader) 
         
-        loader.load{ [weak self] result in
+        forecastLoader.load{ [weak self] result in
             guard let self = self else {return}
             switch result{
             case let .success(forecast):
                 if let forecast = forecast{
-                    self.forecasts = forecast.list
-                    DispatchQueue.main.async{ [weak self] in
-                        guard let self = self else {return}
-                        self.setupTodaysForecast(forecast: forecast.list[0], city: forecast.city.name)
-                        self.forecastTableView.reloadData()
-                    }
+                    self.addForecast( forecast)
                 }
             case let .failure(error):
                 print(error)
             }
-            
         }
-        
+    }
+    
+    fileprivate func addForecast( _ forecast: AForecast) {
+        self.forecasts = forecast.list
+        DispatchQueue.main.async{ [weak self] in
+            guard let self = self else {return}
+            self.setupTodaysForecast(forecast: forecast.list[0], city: forecast.city.name)
+            self.forecastTableView.reloadData()
+        }
     }
     
     func setupTodaysForecast(forecast: ADailyForecast, city: String){
@@ -68,7 +63,7 @@ class DailyForecastViewController: UIViewController {
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let detailVC = segue.destination as? ForecastDetailViewController{
-            detailVC.forecast = sender as! ADailyForecast
+            detailVC.forecast = sender as? ADailyForecast
         }
     }
 }
