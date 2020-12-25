@@ -61,6 +61,7 @@ class DailyForecastViewController: UIViewController {
         let selectedForecast = forecasts[0]
         performSegue(withIdentifier: "showDetail", sender: selectedForecast)
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let detailVC = segue.destination as? ForecastDetailViewController{
             detailVC.forecast = sender as? ADailyForecast
