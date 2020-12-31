@@ -41,7 +41,7 @@ class DailyForecastViewController: UIViewController {
     
     fileprivate func addForecast( _ forecast: AForecast) {
         self.forecasts = forecast.list
-        DispatchQueue.main.async{ [weak self] in
+        runOnMainThread { [weak self] in
             guard let self = self else {return}
             self.setupTodaysForecast(forecast: forecast.list[0], city: forecast.city.name)
             self.forecastTableView.reloadData()
@@ -89,3 +89,10 @@ extension DailyForecastViewController: UITableViewDataSource{
     }
 }
 
+func runOnMainThread(_ task: @escaping () -> ()){
+    if Thread.isMainThread{
+        task()
+    }else{
+        DispatchQueue.main.async{task()}
+    }
+}

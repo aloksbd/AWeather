@@ -23,6 +23,21 @@ class DailyForecastViewControllerTests: XCTestCase {
         XCTAssertEqual(loader.loadCallCount, 1)
     }
     
+    func test_loadCompletion_onSuccessRendersTodaysForecast(){
+        let (sut, loader) = makeSut()
+        let forecast = makeItem()
+        
+        sut.loadViewIfNeeded()
+        
+        loader.completeLoading(with: forecast)
+        
+        XCTAssertEqual(sut.cityLabel.text, forecast.city.name)
+        XCTAssertEqual(sut.todaysDateLabel.text, forecast.list[0].date())
+        XCTAssertEqual(sut.todaysMinTemperatureLabel.text, "min: \(forecast.list[0].temp.min)°")
+        XCTAssertEqual(sut.todaysMaxTemperatureLabel.text, "max: \(forecast.list[0].temp.max)°")
+        XCTAssertEqual(sut.currentTemperatureLabel.text, "\(forecast.list[0].temp.day)°")
+    }
+    
     func test_loadCompletion_onSuccessRendersTableViewCellWithForecasts(){
         let (sut, loader) = makeSut()
         let forecast = makeItem()
@@ -60,7 +75,7 @@ class DailyForecastViewControllerTests: XCTestCase {
 }
 
 private extension DailyForecastViewController{
-    var todaysForecastCount: Int{
+    private var todaysForecastCount: Int{
         get{
             return 1
         }
