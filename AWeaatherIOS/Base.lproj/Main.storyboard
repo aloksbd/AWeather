@@ -278,7 +278,7 @@
         <!--Forecast Detail View Controller-->
         <scene sceneID="FSq-45-T8n">
             <objects>
-                <viewController id="7CK-2y-YOz" customClass="ForecastDetailViewController" customModule="AWeaatherIOS" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="forecastDetailViewController" id="7CK-2y-YOz" customClass="ForecastDetailViewController" customModule="AWeaatherIOS" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Xt1-ux-g4I">
                         <rect key="frame" x="0.0" y="0.0" width="704" height="984"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
