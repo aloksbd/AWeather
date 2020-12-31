@@ -32,7 +32,7 @@ func makeItem() -> AForecast{
     
     let city = City(name: "Ktm")
     
-    let forecastItem = AForecast(city: city, list: [dailyForecast])
+    let forecastItem = AForecast(city: city, list: [dailyForecast,dailyForecast])
     
     return forecastItem
 }
