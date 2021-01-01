@@ -33,8 +33,8 @@ class DailyForecastViewController: UIViewController {
                 if let forecast = forecast{
                     self.addForecast( forecast)
                 }
-            case let .failure(error):
-                print(error)
+            case .failure(_):
+                break
             }
         }
     }

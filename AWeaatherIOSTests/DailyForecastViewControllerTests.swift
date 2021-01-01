@@ -46,8 +46,26 @@ class DailyForecastViewControllerTests: XCTestCase {
         
         loader.completeLoading(with: forecast)
         
-        XCTAssertEqual(forecast.list.count, sut.forecastsCount)
+        XCTAssertEqual(forecast.list.count-1, sut.forecastsCount)
+        
+        let cell = sut.getCell(at: 0)
+        let firstForecastInTable = forecast.list[1]
+        XCTAssertEqual(cell.dayLabel.text, firstForecastInTable.day())
+        XCTAssertEqual(cell.weatherLabel.text, firstForecastInTable.weather[0].main)
+        XCTAssertEqual(cell.maxTemperatureLabel.text,  "max:\( firstForecastInTable.temp.max)°")
+        XCTAssertEqual(cell.minTemperatureLabel.text, "min:\( firstForecastInTable.temp.min)°")
     }
+    
+    func test_loadCompletion_onFailureTableViewRemainsSame(){
+        let (sut, loader) = makeSut()
+        
+        sut.loadViewIfNeeded()
+        
+        loader.completeLoadingWithFailure()
+        
+        XCTAssertEqual(sut.forecastsCount, 0)
+    }
+    
     
     private func makeSut() -> (sut: DailyForecastViewController, loader: ForecastLoaderSpy){
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -71,17 +89,21 @@ class DailyForecastViewControllerTests: XCTestCase {
         func completeLoading(with item: AForecast){
             completion?(.success(item))
         }
+        
+        func completeLoadingWithFailure(){
+            completion?(.failure(NSError()))
+        }
     }
 }
 
 private extension DailyForecastViewController{
-    private var todaysForecastCount: Int{
-        get{
-            return 1
-        }
-    }
     
     var forecastsCount: Int{
-        return forecastTableView.numberOfRows(inSection: 0) + todaysForecastCount
+        return forecastTableView.numberOfRows(inSection: 0)
+    }
+    
+    func getCell(at row: Int) -> ForecastTableViewCell{
+        let cell = forecastTableView.cellForRow(at: IndexPath(row: row, section: 0)) as! ForecastTableViewCell
+        return cell
     }
 }
