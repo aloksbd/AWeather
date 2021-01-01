@@ -7,7 +7,6 @@
 
 import XCTest
 @testable import AWeaatherIOS
-import AWeather
 
 class DailyForecastViewControllerTests: XCTestCase {
     func test_init_doesNotAskToLoadForecast(){
@@ -25,35 +24,39 @@ class DailyForecastViewControllerTests: XCTestCase {
     
     func test_loadCompletion_onSuccessRendersTodaysForecast(){
         let (sut, loader) = makeSut()
-        let (forecast,_) = makeItem()
+        let (aForecast, forecastList) = makeItem()
+        let forecast = forecastList[0]
+        let city = City(name: aForecast.city.name)
         
         sut.loadViewIfNeeded()
         
-        loader.completeLoading(with: forecast)
+        loader.completeLoading(with: (city, forecastList))
         
-        XCTAssertEqual(sut.cityLabel.text, forecast.city.name)
-        XCTAssertEqual(sut.todaysDateLabel.text, forecast.list[0].date())
-        XCTAssertEqual(sut.todaysMinTemperatureLabel.text, "min: \(forecast.list[0].temp.min)°")
-        XCTAssertEqual(sut.todaysMaxTemperatureLabel.text, "max: \(forecast.list[0].temp.max)°")
-        XCTAssertEqual(sut.currentTemperatureLabel.text, "\(forecast.list[0].temp.day)°")
+        XCTAssertEqual(sut.cityLabel.text, city.name)
+        XCTAssertEqual(sut.todaysDateLabel.text, forecast.date)
+        XCTAssertEqual(sut.todaysMinTemperatureLabel.text, "min: \(forecast.minTemperature)°")
+        XCTAssertEqual(sut.todaysMaxTemperatureLabel.text, "max: \(forecast.maxTemperature)°")
+        XCTAssertEqual(sut.currentTemperatureLabel.text, "\(forecast.dayTemperature)°")
     }
     
     func test_loadCompletion_onSuccessRendersTableViewCellWithForecasts(){
         let (sut, loader) = makeSut()
-        let (forecast,_) = makeItem()
+        let (aForecast, forecastList) = makeItem()
+        let firstForecastInTable = forecastList[1]
+        let city = City(name: aForecast.city.name)
         
         sut.loadViewIfNeeded()
         
-        loader.completeLoading(with: forecast)
+        loader.completeLoading(with: (city, forecastList))
         
-        XCTAssertEqual(forecast.list.count-1, sut.forecastsCount)
+        XCTAssertEqual(forecastList.count-1, sut.forecastsCount)
         
         let cell = sut.getCell(at: 0)
-        let firstForecastInTable = forecast.list[1]
-        XCTAssertEqual(cell.dayLabel.text, firstForecastInTable.day())
-        XCTAssertEqual(cell.weatherLabel.text, firstForecastInTable.weather[0].main)
-        XCTAssertEqual(cell.maxTemperatureLabel.text,  "max:\( firstForecastInTable.temp.max)°")
-        XCTAssertEqual(cell.minTemperatureLabel.text, "min:\( firstForecastInTable.temp.min)°")
+        
+        XCTAssertEqual(cell.dayLabel.text, firstForecastInTable.day)
+        XCTAssertEqual(cell.weatherLabel.text, firstForecastInTable.weather)
+        XCTAssertEqual(cell.maxTemperatureLabel.text,  "max:\( firstForecastInTable.maxTemperature)°")
+        XCTAssertEqual(cell.minTemperatureLabel.text, "min:\( firstForecastInTable.minTemperature)°")
     }
     
     func test_loadCompletion_onFailureTableViewRemainsSame(){
@@ -77,16 +80,16 @@ class DailyForecastViewControllerTests: XCTestCase {
         return (viewController, loader)
     }
     
-    class ForecastLoaderSpy: AForecastLoader{
+    class ForecastLoaderSpy: ForecastLoader{
         var loadCallCount = 0
-        var completion: ((Result<AForecast?, Error>) -> ())?
-        
-        func load(completion: @escaping (Result<AForecast?, Error>) -> ()) {
+        var completion: ((ForecastLoader.Result) -> ())?
+    
+        func load(completion: @escaping (ForecastLoader.Result) -> ()) {
             loadCallCount += 1
             self.completion = completion
         }
         
-        func completeLoading(with item: AForecast){
+        func completeLoading(with item: ForecastRoot){
             completion?(.success(item))
         }
         
