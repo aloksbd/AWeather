@@ -11,7 +11,8 @@ import XCTest
 class ForecastDetailViewControllerTests: XCTestCase {
     func test_viewDidLoad_rendersAllLabelsWithCorrectFormattedText(){
         let sut = makeSut()
-        let forecast = makeItem().list[0]
+        let (item, _) = makeItem()
+        let forecast = item.list[0]
         sut.forecast = forecast
         sut.loadView()
         sut.viewDidLoad()

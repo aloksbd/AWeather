@@ -25,7 +25,7 @@ class DailyForecastViewControllerTests: XCTestCase {
     
     func test_loadCompletion_onSuccessRendersTodaysForecast(){
         let (sut, loader) = makeSut()
-        let forecast = makeItem()
+        let (forecast,_) = makeItem()
         
         sut.loadViewIfNeeded()
         
@@ -40,7 +40,7 @@ class DailyForecastViewControllerTests: XCTestCase {
     
     func test_loadCompletion_onSuccessRendersTableViewCellWithForecasts(){
         let (sut, loader) = makeSut()
-        let forecast = makeItem()
+        let (forecast,_) = makeItem()
         
         sut.loadViewIfNeeded()
         

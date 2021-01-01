@@ -23,6 +23,29 @@ class ForecastRepositoryTests: XCTestCase {
         XCTAssertEqual(loader.loadCallCount, 1)
     }
     
+    func test_load_returnsForecastRootOnLoadSuccessful(){
+        
+        let (sut, loader) = makeSut()
+        
+        let (item, list) = makeItem()
+        let exp = expectation(description: "wait for load")
+        
+        sut.load{result in
+            switch result{
+            case let .success(root):
+                XCTAssertEqual(root?.city.name, item.city.name)
+                XCTAssertEqual(root?.list, list)
+            default:
+                XCTFail("should give item")
+            }
+            exp.fulfill()
+        }
+        
+        loader.completeLoading(with: item)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     //MARK: Helpers
     private func makeSut() -> (sut: ForecastRepository, loader: ForecastLoaderSpy){
         let loader = ForecastLoaderSpy()

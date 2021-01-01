@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Forecast{
+struct Forecast: Equatable{
     let dateTimeStamp: Int
     let sunriseTimeStamp: Int
     let sunsetTimeStamp: Int

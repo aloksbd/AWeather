@@ -7,8 +7,9 @@
 
 import Foundation
 import AWeather
+@testable import AWeaatherIOS
 
-func makeItem() -> AForecast{
+func makeItem() -> (item: AForecast, list: [Forecast]){
     let weather = Weather(main: "sunny")
     
     let temperature = Temperature(
@@ -30,10 +31,34 @@ func makeItem() -> AForecast{
         temperature: temperature
     )
     
-    let city = City(name: "Ktm")
+    let city = AWeather.City(name: "Ktm")
     
     let forecastItem = AForecast(city: city, list: [dailyForecast,dailyForecast])
     
-    return forecastItem
+    
+    
+    return (forecastItem, makeList(forecastItem))
+}
+
+private func makeList(_ forecast: AForecast) -> [Forecast]{
+    var forecastList = [Forecast]()
+    for item in forecast.list{
+        forecastList.append(Forecast(dateTimeStamp: item.dt,
+                                     sunriseTimeStamp: item.sunrise,
+                                     sunsetTimeStamp: item.sunset,
+                                     humidity: item.humidity,
+                                     windSpeed: item.speed,
+                                     rainChance: item.pop,
+                                     weather: item.weather[0].main,
+                                     minTemperature: item.temp.min,
+                                     maxTemperature: item.temp.max,
+                                     dayTemperature: item.temp.day,
+                                     eveningTemperature: item.temp.eve,
+                                     nightTemperature: item.temp.night,
+                                     morningTemperature: item.temp.morn
+                            )
+        )
+    }
+    return forecastList
 }
 

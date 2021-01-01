@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct City{
+struct City: Equatable{
     var name: String
 }
