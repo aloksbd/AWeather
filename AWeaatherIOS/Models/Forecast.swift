@@ -13,7 +13,7 @@ struct Forecast: Equatable{
     let sunsetTimeStamp: Int
     let humidity: Int
     let windSpeed: Double
-    let rainChance: Int
+    let rainChance: Double
     let weather: String
     let minTemperature: Double
     let maxTemperature: Double

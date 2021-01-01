@@ -13,11 +13,11 @@ public struct ADailyForecast: Codable, Equatable{
     public let sunset: Int
     public let humidity: Int
     public let speed: Double
-    public let pop: Int
+    public let pop: Double
     public let weather: [Weather]
     public let temp: Temperature
     
-    public init(dt: Int, sunrise: Int, sunset: Int, humidity: Int, speed: Double, pop: Int, weather: [Weather], temperature: Temperature){
+    public init(dt: Int, sunrise: Int, sunset: Int, humidity: Int, speed: Double, pop: Double, weather: [Weather], temperature: Temperature){
         self.dt = dt
         self.sunrise = sunrise
         self.sunset = sunset
