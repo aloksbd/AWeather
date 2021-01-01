@@ -5,7 +5,8 @@
 //  Created by Alok Subedi on 01/01/2021.
 //
 
-import Foundation
+import UIKit
+import AWeather
 
 class DailyForecastFactory{
     private static let WEATHER_URL_String = "http://api.openweathermap.org/data/2.5/forecast/daily?q=Kathmandu&units=metric&cnt=10&appid=4375694cabc41be5f7ebee4ecbd3fc03"
