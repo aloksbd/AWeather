@@ -184,20 +184,13 @@
 		5CB717EA2590EEC300F09D1D /* AWeaatherIOS */ = {
 			isa = PBXGroup;
 			children = (
-				5CB717EB2590EEC300F09D1D /* AppDelegate.swift */,
-				5CB717ED2590EEC300F09D1D /* SceneDelegate.swift */,
-				5CB717EF2590EEC300F09D1D /* DailyForecastViewController.swift */,
-				5CB717F12590EEC300F09D1D /* Main.storyboard */,
+				5CBB59C6259F3FE000A9627E /* AppLifeCycle */,
 				5CB717F42590EEC700F09D1D /* Assets.xcassets */,
-				5CB717F62590EEC700F09D1D /* LaunchScreen.storyboard */,
 				5CB717F92590EEC700F09D1D /* Info.plist */,
-				5CB718512591079500F09D1D /* ForecastTableViewCell.swift */,
-				5CB7186D25912E6C00F09D1D /* ForecastDetailViewController.swift */,
-				5CBB597F259EE88F00A9627E /* DailyForecastFactory.swift */,
-				5CBB5986259EEA4D00A9627E /* City.swift */,
-				5CBB598D259EEA9500A9627E /* Forecast.swift */,
-				5CBB5999259F037200A9627E /* ForecastRepository.swift */,
-				5CBB59B1259F3EDF00A9627E /* ForecastLoader.swift */,
+				5CBB59BF259F3F5500A9627E /* ViewControllers */,
+				5CBB59C5259F3F6700A9627E /* View */,
+				5CBB59B9259F3F4900A9627E /* Models */,
+				5CBB59B8259F3F3900A9627E /* Services */,
 			);
 			path = AWeaatherIOS;
 			sourceTree = "<group>";
@@ -236,6 +229,61 @@
 				5CBB5962259D973D00A9627E /* AForecastItemMaker.swift */,
 			);
 			path = Hepers;
+			sourceTree = "<group>";
+		};
+		5CBB59B8259F3F3900A9627E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5CBB597F259EE88F00A9627E /* DailyForecastFactory.swift */,
+				5CBB5999259F037200A9627E /* ForecastRepository.swift */,
+				5CBB59B1259F3EDF00A9627E /* ForecastLoader.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		5CBB59B9259F3F4900A9627E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5CBB5986259EEA4D00A9627E /* City.swift */,
+				5CBB598D259EEA9500A9627E /* Forecast.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5CBB59BF259F3F5500A9627E /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CB717EF2590EEC300F09D1D /* DailyForecastViewController.swift */,
+				5CB7186D25912E6C00F09D1D /* ForecastDetailViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		5CBB59C5259F3F6700A9627E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5CBB59C7259F403D00A9627E /* StoryBoards */,
+				5CB718512591079500F09D1D /* ForecastTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5CBB59C6259F3FE000A9627E /* AppLifeCycle */ = {
+			isa = PBXGroup;
+			children = (
+				5CB717EB2590EEC300F09D1D /* AppDelegate.swift */,
+				5CB717ED2590EEC300F09D1D /* SceneDelegate.swift */,
+			);
+			path = AppLifeCycle;
+			sourceTree = "<group>";
+		};
+		5CBB59C7259F403D00A9627E /* StoryBoards */ = {
+			isa = PBXGroup;
+			children = (
+				5CB717F12590EEC300F09D1D /* Main.storyboard */,
+				5CB717F62590EEC700F09D1D /* LaunchScreen.storyboard */,
+			);
+			path = StoryBoards;
 			sourceTree = "<group>";
 		};
 		5CCC0112258DE710004FD118 = {
