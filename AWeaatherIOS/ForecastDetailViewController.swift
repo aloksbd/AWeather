@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import AWeather
 
 class ForecastDetailViewController: UIViewController {
 
@@ -25,22 +24,22 @@ class ForecastDetailViewController: UIViewController {
     @IBOutlet weak var rainLabel: UILabel!
     @IBOutlet weak var windLabel: UILabel!
     
-    var forecast: ADailyForecast!
+    var forecast: Forecast!
     
     override func viewDidLoad() {
-        dateLabel.text = forecast.day()
-        temperatureLabel.text = "\(forecast.temp.day)°"
-        weatherImageView.image = UIImage(named: forecast.weather[0].main)
-        sunriseLabel.text = forecast.sunriseTime()
-        sunsetLabel.text = forecast.sunsetTime()
-        dayTemeratureLabel.text = "\(forecast.temp.day)°"
-        morningTemperatureLabel.text = "\(forecast.temp.morn)°"
-        eveningTemperatureLabel.text = "\(forecast.temp.eve)°"
-        nightTemperatureLabel.text = "\(forecast.temp.night)°"
-        minTemperatureLabel.text = "\(forecast.temp.min)°"
-        maxTemperatureLabel.text = "\(forecast.temp.max)°"
+        dateLabel.text = forecast.day
+        temperatureLabel.text = "\(forecast.dayTemperature)°"
+        weatherImageView.image = UIImage(named: forecast.weather)
+        sunriseLabel.text = forecast.sunriseTime
+        sunsetLabel.text = forecast.sunsetTime
+        dayTemeratureLabel.text = "\(forecast.dayTemperature)°"
+        morningTemperatureLabel.text = "\(forecast.morningTemperature)°"
+        eveningTemperatureLabel.text = "\(forecast.eveningTemperature)°"
+        nightTemperatureLabel.text = "\(forecast.nightTemperature)°"
+        minTemperatureLabel.text = "\(forecast.minTemperature)°"
+        maxTemperatureLabel.text = "\(forecast.maxTemperature)°"
         humidityLabel.text = "\(forecast.humidity)"
-        rainLabel.text = "\(forecast.pop)"
-        windLabel.text = "\(forecast.speed)"
+        rainLabel.text = "\(forecast.rainChance)"
+        windLabel.text = "\(forecast.windSpeed)"
     }
 }
