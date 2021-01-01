@@ -40,8 +40,4 @@ public class ARemoteForecastLoader: AForecastLoader{
             }
         }
     }
-    
-    deinit {
-        print("deinit : ")
-    }
 }
