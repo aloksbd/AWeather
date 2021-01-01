@@ -29,16 +29,16 @@ class ForecastDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         dateLabel.text = forecast.day()
-        temperatureLabel.text = "\(forecast.temp.day)"
+        temperatureLabel.text = "\(forecast.temp.day)°"
         weatherImageView.image = UIImage(named: forecast.weather[0].main)
         sunriseLabel.text = forecast.sunriseTime()
         sunsetLabel.text = forecast.sunsetTime()
-        dayTemeratureLabel.text = "\(forecast.temp.day)"
-        morningTemperatureLabel.text = "\(forecast.temp.morn)"
-        eveningTemperatureLabel.text = "\(forecast.temp.eve)"
-        nightTemperatureLabel.text = "\(forecast.temp.night)"
-        minTemperatureLabel.text = "\(forecast.temp.min)"
-        maxTemperatureLabel.text = "\(forecast.temp.max)"
+        dayTemeratureLabel.text = "\(forecast.temp.day)°"
+        morningTemperatureLabel.text = "\(forecast.temp.morn)°"
+        eveningTemperatureLabel.text = "\(forecast.temp.eve)°"
+        nightTemperatureLabel.text = "\(forecast.temp.night)°"
+        minTemperatureLabel.text = "\(forecast.temp.min)°"
+        maxTemperatureLabel.text = "\(forecast.temp.max)°"
         humidityLabel.text = "\(forecast.humidity)"
         rainLabel.text = "\(forecast.pop)"
         windLabel.text = "\(forecast.speed)"
