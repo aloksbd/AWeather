@@ -46,12 +46,37 @@ class ForecastRepositoryTests: XCTestCase {
         wait(for: [exp], timeout: 1.0)
     }
     
+    func test_load_returnsErrorOnFailure(){
+        let (sut, loader) = makeSut()
+        let expectedError = anyNSError()
+        
+        let exp = expectation(description: "wait for load")
+        
+        sut.load{result in
+            switch result{
+            case let .failure(error):
+                XCTAssertEqual(error as NSError, expectedError)
+            default:
+                XCTFail("should give error")
+            }
+            exp.fulfill()
+        }
+        
+        loader.completeLoadingWithFailure(expectedError)
+        
+        wait(for: [exp], timeout: 1.0)
+    }
+    
     //MARK: Helpers
     private func makeSut() -> (sut: ForecastRepository, loader: ForecastLoaderSpy){
         let loader = ForecastLoaderSpy()
         let sut = ForecastRepository(loader: loader)
         
         return(sut,loader)
+    }
+    
+    private func anyNSError() -> NSError{
+        return NSError(domain: "any error", code: 0)
     }
     
     class ForecastLoaderSpy: AForecastLoader{
@@ -67,8 +92,8 @@ class ForecastRepositoryTests: XCTestCase {
             completion?(.success(item))
         }
         
-        func completeLoadingWithFailure(){
-            completion?(.failure(NSError()))
+        func completeLoadingWithFailure(_ error: NSError){
+            completion?(.failure(error))
         }
     }
 }

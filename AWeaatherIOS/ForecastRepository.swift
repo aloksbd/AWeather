@@ -34,8 +34,8 @@ class ForecastRepository: ForecastLoader{
                 }else{
                     completion(.success(nil))
                 }
-            case .failure(_):
-                break
+            case let .failure(error):
+                completion(.failure(error))
             }
         }
     }
