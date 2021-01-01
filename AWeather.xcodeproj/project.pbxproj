@@ -32,6 +32,12 @@
 		5CB7186E25912E6C00F09D1D /* ForecastDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CB7186D25912E6C00F09D1D /* ForecastDetailViewController.swift */; };
 		5CBB5963259D973D00A9627E /* AForecastItemMaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBB5962259D973D00A9627E /* AForecastItemMaker.swift */; };
 		5CBB596F259DAE2F00A9627E /* DailyForecastViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBB596E259DAE2F00A9627E /* DailyForecastViewControllerTests.swift */; };
+		5CBB5980259EE88F00A9627E /* DailyForecastFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBB597F259EE88F00A9627E /* DailyForecastFactory.swift */; };
+		5CBB5987259EEA4D00A9627E /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBB5986259EEA4D00A9627E /* City.swift */; };
+		5CBB598E259EEA9500A9627E /* Forecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBB598D259EEA9500A9627E /* Forecast.swift */; };
+		5CBB599A259F037200A9627E /* ForecastRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBB5999259F037200A9627E /* ForecastRepository.swift */; };
+		5CBB59A1259F052700A9627E /* ForecastRepositoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBB59A0259F052700A9627E /* ForecastRepositoryTests.swift */; };
+		5CBB59B2259F3EDF00A9627E /* ForecastLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBB59B1259F3EDF00A9627E /* ForecastLoader.swift */; };
 		5CCC0126258DE711004FD118 /* AWeather.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5CCC011C258DE710004FD118 /* AWeather.framework */; };
 		5CCC0141258E0F07004FD118 /* AForecast.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0140258E0F07004FD118 /* AForecast.swift */; };
 		5CCC0146258E126F004FD118 /* City.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CCC0145258E126F004FD118 /* City.swift */; };
@@ -100,6 +106,12 @@
 		5CB7186D25912E6C00F09D1D /* ForecastDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastDetailViewController.swift; sourceTree = "<group>"; };
 		5CBB5962259D973D00A9627E /* AForecastItemMaker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AForecastItemMaker.swift; sourceTree = "<group>"; };
 		5CBB596E259DAE2F00A9627E /* DailyForecastViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastViewControllerTests.swift; sourceTree = "<group>"; };
+		5CBB597F259EE88F00A9627E /* DailyForecastFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyForecastFactory.swift; sourceTree = "<group>"; };
+		5CBB5986259EEA4D00A9627E /* City.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = City.swift; sourceTree = "<group>"; };
+		5CBB598D259EEA9500A9627E /* Forecast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Forecast.swift; sourceTree = "<group>"; };
+		5CBB5999259F037200A9627E /* ForecastRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastRepository.swift; sourceTree = "<group>"; };
+		5CBB59A0259F052700A9627E /* ForecastRepositoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastRepositoryTests.swift; sourceTree = "<group>"; };
+		5CBB59B1259F3EDF00A9627E /* ForecastLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastLoader.swift; sourceTree = "<group>"; };
 		5CCC011C258DE710004FD118 /* AWeather.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AWeather.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5CCC011F258DE710004FD118 /* AWeather.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AWeather.h; sourceTree = "<group>"; };
 		5CCC0120258DE710004FD118 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -172,15 +184,13 @@
 		5CB717EA2590EEC300F09D1D /* AWeaatherIOS */ = {
 			isa = PBXGroup;
 			children = (
-				5CB717EB2590EEC300F09D1D /* AppDelegate.swift */,
-				5CB717ED2590EEC300F09D1D /* SceneDelegate.swift */,
-				5CB717EF2590EEC300F09D1D /* DailyForecastViewController.swift */,
-				5CB717F12590EEC300F09D1D /* Main.storyboard */,
+				5CBB59C6259F3FE000A9627E /* AppLifeCycle */,
 				5CB717F42590EEC700F09D1D /* Assets.xcassets */,
-				5CB717F62590EEC700F09D1D /* LaunchScreen.storyboard */,
 				5CB717F92590EEC700F09D1D /* Info.plist */,
-				5CB718512591079500F09D1D /* ForecastTableViewCell.swift */,
-				5CB7186D25912E6C00F09D1D /* ForecastDetailViewController.swift */,
+				5CBB59BF259F3F5500A9627E /* ViewControllers */,
+				5CBB59C5259F3F6700A9627E /* View */,
+				5CBB59B9259F3F4900A9627E /* Models */,
+				5CBB59B8259F3F3900A9627E /* Services */,
 			);
 			path = AWeaatherIOS;
 			sourceTree = "<group>";
@@ -192,6 +202,7 @@
 				5CB718022590EEC800F09D1D /* ForecastDetailViewControllerTests.swift */,
 				5CB718042590EEC800F09D1D /* Info.plist */,
 				5CBB596E259DAE2F00A9627E /* DailyForecastViewControllerTests.swift */,
+				5CBB59A0259F052700A9627E /* ForecastRepositoryTests.swift */,
 			);
 			path = AWeaatherIOSTests;
 			sourceTree = "<group>";
@@ -218,6 +229,61 @@
 				5CBB5962259D973D00A9627E /* AForecastItemMaker.swift */,
 			);
 			path = Hepers;
+			sourceTree = "<group>";
+		};
+		5CBB59B8259F3F3900A9627E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5CBB597F259EE88F00A9627E /* DailyForecastFactory.swift */,
+				5CBB5999259F037200A9627E /* ForecastRepository.swift */,
+				5CBB59B1259F3EDF00A9627E /* ForecastLoader.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		5CBB59B9259F3F4900A9627E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5CBB5986259EEA4D00A9627E /* City.swift */,
+				5CBB598D259EEA9500A9627E /* Forecast.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5CBB59BF259F3F5500A9627E /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				5CB717EF2590EEC300F09D1D /* DailyForecastViewController.swift */,
+				5CB7186D25912E6C00F09D1D /* ForecastDetailViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		5CBB59C5259F3F6700A9627E /* View */ = {
+			isa = PBXGroup;
+			children = (
+				5CBB59C7259F403D00A9627E /* StoryBoards */,
+				5CB718512591079500F09D1D /* ForecastTableViewCell.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		5CBB59C6259F3FE000A9627E /* AppLifeCycle */ = {
+			isa = PBXGroup;
+			children = (
+				5CB717EB2590EEC300F09D1D /* AppDelegate.swift */,
+				5CB717ED2590EEC300F09D1D /* SceneDelegate.swift */,
+			);
+			path = AppLifeCycle;
+			sourceTree = "<group>";
+		};
+		5CBB59C7259F403D00A9627E /* StoryBoards */ = {
+			isa = PBXGroup;
+			children = (
+				5CB717F12590EEC300F09D1D /* Main.storyboard */,
+				5CB717F62590EEC700F09D1D /* LaunchScreen.storyboard */,
+			);
+			path = StoryBoards;
 			sourceTree = "<group>";
 		};
 		5CCC0112258DE710004FD118 = {
@@ -513,11 +579,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5CBB598E259EEA9500A9627E /* Forecast.swift in Sources */,
 				5CB7186E25912E6C00F09D1D /* ForecastDetailViewController.swift in Sources */,
 				5CB718522591079500F09D1D /* ForecastTableViewCell.swift in Sources */,
 				5CB717F02590EEC300F09D1D /* DailyForecastViewController.swift in Sources */,
+				5CBB5980259EE88F00A9627E /* DailyForecastFactory.swift in Sources */,
+				5CBB59B2259F3EDF00A9627E /* ForecastLoader.swift in Sources */,
 				5CB717EC2590EEC300F09D1D /* AppDelegate.swift in Sources */,
+				5CBB599A259F037200A9627E /* ForecastRepository.swift in Sources */,
 				5CB717EE2590EEC300F09D1D /* SceneDelegate.swift in Sources */,
+				5CBB5987259EEA4D00A9627E /* City.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -527,6 +598,7 @@
 			files = (
 				5CBB5963259D973D00A9627E /* AForecastItemMaker.swift in Sources */,
 				5CBB596F259DAE2F00A9627E /* DailyForecastViewControllerTests.swift in Sources */,
+				5CBB59A1259F052700A9627E /* ForecastRepositoryTests.swift in Sources */,
 				5CB718032590EEC800F09D1D /* ForecastDetailViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

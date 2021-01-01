@@ -6,11 +6,10 @@
 //
 
 import UIKit
-import AWeather
 
 class DailyForecastViewController: UIViewController {
     let cellId = "forecastCell"
-    var forecastLoader: AForecastLoader!
+    var forecastLoader: ForecastLoader!
     
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var todaysDateLabel: UILabel!
@@ -21,7 +20,8 @@ class DailyForecastViewController: UIViewController {
     
     @IBOutlet weak var forecastTableView: UITableView!
     
-    var forecasts = [ADailyForecast]()
+    var forecasts = [Forecast]()
+    var city = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,9 +29,9 @@ class DailyForecastViewController: UIViewController {
         forecastLoader.load{ [weak self] result in
             guard let self = self else {return}
             switch result{
-            case let .success(forecast):
-                if let forecast = forecast{
-                    self.addForecast( forecast)
+            case let .success(root):
+                if let root = root{
+                    self.addForecast( root)
                 }
             case .failure(_):
                 break
@@ -39,7 +39,7 @@ class DailyForecastViewController: UIViewController {
         }
     }
     
-    fileprivate func addForecast( _ forecast: AForecast) {
+    fileprivate func addForecast( _ forecast: ForecastRoot) {
         self.forecasts = forecast.list
         runOnMainThread { [weak self] in
             guard let self = self else {return}
@@ -48,13 +48,13 @@ class DailyForecastViewController: UIViewController {
         }
     }
     
-    func setupTodaysForecast(forecast: ADailyForecast, city: String){
+    func setupTodaysForecast(forecast: Forecast, city: String){
         cityLabel.text = city
-        todaysDateLabel.text = "\(forecast.date())"
-        todaysMinTemperatureLabel.text = "min: \(forecast.temp.min)°"
-        todaysMaxTemperatureLabel.text = "max: \(forecast.temp.max)°"
-        currentTemperatureLabel.text = "\(forecast.temp.day)°"
-        todaysWeatherImageView.image = UIImage(named: forecast.weather[0].main)
+        todaysDateLabel.text = "\(forecast.date)"
+        todaysMinTemperatureLabel.text = "min: \(forecast.minTemperature)°"
+        todaysMaxTemperatureLabel.text = "max: \(forecast.maxTemperature)°"
+        currentTemperatureLabel.text = "\(forecast.dayTemperature)°"
+        todaysWeatherImageView.image = UIImage(named: forecast.weather)
     }
     
     @IBAction func todaysForecastViewTapped(_ sender: Any) {
@@ -64,7 +64,7 @@ class DailyForecastViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let detailVC = segue.destination as? ForecastDetailViewController{
-            detailVC.forecast = sender as? ADailyForecast
+            detailVC.forecast = sender as? Forecast
         }
     }
 }
@@ -84,7 +84,7 @@ extension DailyForecastViewController: UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! ForecastTableViewCell
         let forecast = forecasts[indexPath.row + 1]
-        cell.setup(day: "\(forecast.day())", weather: forecast.weather[0].main, maxTemp: "\(forecast.temp.max)", minTemp: "\(forecast.temp.min)")
+        cell.setup(day: "\(forecast.day)", weather: forecast.weather, maxTemp: "\(forecast.maxTemperature)", minTemp: "\(forecast.minTemperature)")
         return cell
     }
 }
