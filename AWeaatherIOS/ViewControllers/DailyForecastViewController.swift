@@ -89,10 +89,3 @@ extension DailyForecastViewController: UITableViewDataSource{
     }
 }
 
-func runOnMainThread(_ task: @escaping () -> ()){
-    if Thread.isMainThread{
-        task()
-    }else{
-        DispatchQueue.main.async{task()}
-    }
-}
