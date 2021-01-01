@@ -26,11 +26,11 @@ class ForecastRepository: ForecastLoader{
     
     func load(completion: @escaping (ForecastLoader.Result) -> ()) {
         loader.load{[weak self] result in
-            guard let self = self else {return}
+            guard self != nil else {return}
             switch result{
             case let .success(forecast):
                 if let forecast = forecast{
-                    completion(.success(self.map(forecast)))
+                    completion(.success(Mapper.map(forecast)))
                 }else{
                     completion(.success(nil))
                 }
@@ -39,8 +39,10 @@ class ForecastRepository: ForecastLoader{
             }
         }
     }
-    
-    private func map(_ forecast: AForecast) -> ForecastRoot{
+}
+
+private class Mapper{
+    static func map(_ forecast: AForecast) -> ForecastRoot{
         let city = City(name: forecast.city.name)
         var forecastList = [Forecast]()
         for item in forecast.list{
