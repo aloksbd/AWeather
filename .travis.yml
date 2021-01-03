@@ -6,7 +6,7 @@ xcode_project: AWeather.xcodeproj
 
 matrix:
   include:
-    - xcode_scheme: VirtualGameControllerIOS
+    - xcode_scheme: CI-IOS
       xcode_sdk: iphonesimulator13.0
 
     - xcode_scheme: CI
