@@ -1,5 +1,13 @@
 os: osx
 osx_image: xcode12.2
 language: swift
-script: 
-  xcodebuild clean build test -project AWeather.xcodeproj -scheme "CI" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -scheme "CI-IOS" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO -sdk iphonesimulator -destination "platform=iOS Simulator,name=iPhone 11" ONLY_ACTIVE_ARCH=YES
+
+xcode_project: AWeather.xcodeproj
+
+matrix:
+  include:
+    - xcode_scheme: VirtualGameControllerIOS
+      xcode_sdk: iphonesimulator13.0
+
+    - xcode_scheme: CI
+      xcode_sdk: macosx11.0
