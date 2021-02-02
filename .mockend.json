@@ -1,0 +1,28 @@
+{
+	"items": [
+		{
+			"id": "3ED3E961-55CB-4BEF-92FC-32AE53E56D03",
+			"message": "Opened to the public on 14 May 1896.",
+			"created_at": "2020-10-01T11:23:51+0000",
+			"author": {
+				"username": "Marvin"
+			},
+		},
+		{
+			"id": "89D86E9E-BFBD-4D76-B0A0-367581E6407E",
+			"message": "In 1971, the pier closed on safety grounds, with ownership being passed to Arfon Borough Council in 1974.",
+			"created_at": "2020-09-21T10:01:50+0000",
+			"author": {
+				"username": "Tyler"
+			},
+		},
+		{
+			"id": "71C9EDDB-8EE9-4B61-9F87-322437570B39",
+			"created_at": "2020-07-31T08:00:00+0000",
+			"message": "It was announced in August 2017 that major restoration work would take place at a cost of £1million, as the Pier has not received any major maintenance works for many years and is now in need of a refurbishment. The last restoration and renovation programme was in 1980s. The work will be funded by Bangor City Council and is likely to take up to three years to complete. Initially, the pier remained fully open to the public during the restoration works. However, following a structural report which found the pier head to be in a dangerous condition, it was closed to the public on a temporary basis in June 2018.",
+			"author": {
+				"username": "Mary"
+			}
+		}
+	]
+}
